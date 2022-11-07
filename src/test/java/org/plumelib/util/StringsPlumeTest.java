@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 })
 public final class StringsPlumeTest {
 
-  @Test
   public void test_replacePrefix() {
 
     // public static String replacePrefix(String target, String oldStr, String newStr)
@@ -25,7 +24,6 @@ public final class StringsPlumeTest {
     assertEquals("abcdefg", StringsPlume.replacePrefix("abcdefg", "bcd", ""));
   }
 
-  @Test
   public void test_replaceSuffix() {
 
     // public static String replaceSuffix(String target, String oldStr, String newStr)
@@ -36,7 +34,6 @@ public final class StringsPlumeTest {
     assertEquals("abcdefg", StringsPlume.replaceSuffix("abcdefg", "cdef", ""));
   }
 
-  @Test
   public void test_replaceAll() {
 
     assertEquals("avarywhara", StringsPlume.replaceAll("everywhere", Pattern.compile("e"), "a"));
@@ -45,7 +42,6 @@ public final class StringsPlumeTest {
         "abbababba", StringsPlume.replaceAll("abababa", Pattern.compile("a(b)a"), "a$1$1a"));
   }
 
-  @Test
   public void test_prefixLines() {
 
     // public static String prefixLines(String prefix, String s) {
@@ -58,7 +54,6 @@ public final class StringsPlumeTest {
         StringsPlume.prefixLines("  ", StringsPlume.joinLines("", "1", "", "2", "")));
   }
 
-  @Test
   public void test_indentLines() {
 
     // public static String indentLines(int indent, String s) {
@@ -71,7 +66,6 @@ public final class StringsPlumeTest {
         StringsPlume.indentLines(2, StringsPlume.joinLines("", "1", "", "2", "")));
   }
 
-  @Test
   public void test_join() {
 
     // public static String join(Object[] a, String delim)
@@ -99,7 +93,6 @@ public final class StringsPlumeTest {
   }
 
   @SuppressWarnings("UnicodeEscape")
-  @Test
   public void test_escapeJava() {
 
     // public static String escapeJava(String orig)
@@ -171,14 +164,12 @@ public final class StringsPlumeTest {
     // assertTrue(StringsPlume.unescapeNonASCII("\\115\\111\\124").equals("MIT"));
   }
 
-  @Test
   public void test_charLiteral() {
     assertEquals("'a'", StringsPlume.charLiteral('a'));
     assertEquals("'\\''", StringsPlume.charLiteral('\''));
     assertEquals("'\"'", StringsPlume.charLiteral('\"'));
   }
 
-  @Test
   public void test_removeWhitespace() {
 
     // public static String removeWhitespaceAround(String arg, String delimiter)
@@ -237,7 +228,6 @@ public final class StringsPlumeTest {
     assertEquals("cd123", StringsPlume.removeWhitespaceAround("cd 123", "123"));
   }
 
-  @Test
   public void test_nplural() {
 
     // public static String nplural(int n, String noun)
@@ -274,7 +264,6 @@ public final class StringsPlumeTest {
     assertEquals("2 fanboys", StringsPlume.nplural(2, "fanboy"));
   }
 
-  @Test
   public void test_conjunction() {
 
     // public static String conjunction(String conjunction, List<?> elements)
@@ -291,7 +280,6 @@ public final class StringsPlumeTest {
         "a, b, c, or d", StringsPlume.conjunction("or", Arrays.asList("a", "b", "c", "d")));
   }
 
-  @Test
   public void test_rpad() {
 
     // public static String rpad(String s, int length)
@@ -311,7 +299,6 @@ public final class StringsPlumeTest {
 
   }
 
-  @Test
   public void test_count() {
 
     // public static int count(String s, int ch)
@@ -334,7 +321,6 @@ public final class StringsPlumeTest {
   // This is tested by the tokens methods.
   // public static ArrayList makeArrayList(Enumeration e)
 
-  @Test
   public void test_abbreviateNumber() {
 
     Locale.setDefault(Locale.US);
@@ -364,7 +350,6 @@ public final class StringsPlumeTest {
     assertEquals("9.88G", StringsPlume.abbreviateNumber(9876543210L));
   }
 
-  @Test
   public void testCountFormatArguments() {
     assertEquals(0, StringsPlume.countFormatArguments("No specifiier."));
     assertEquals(0, StringsPlume.countFormatArguments("This is 100%"));
@@ -382,7 +367,6 @@ public final class StringsPlumeTest {
     assertEquals(14, StringsPlume.countFormatArguments("%f and %14$f makes fourteen"));
   }
 
-  @Test
   public void testSplitLines() {
 
     String str = "one\ntwo\n\rthree\r\nfour\rfive\n\n\nsix\r\n\r\n\r\n";

@@ -14,7 +14,6 @@ public final class WeakIdentityHashMapTest {
    * rather than a normal hash. The tests will fail however, if WeakHashMap is swapped for
    * WeakIdentityHashMap.
    */
-  @Test
   public void testWeakIdentityHashMap() {
 
     String s1 = "one";

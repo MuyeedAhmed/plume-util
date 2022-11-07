@@ -35,7 +35,6 @@ public final class SystemPlume {
    * @return true iff the property has a string value that represents true
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // does not depend on object identity
-  @Pure
   public static boolean getBooleanSystemProperty(String key, boolean defaultValue) {
     return UtilPlume.getBooleanProperty(System.getProperties(), key, defaultValue);
   }
@@ -48,7 +47,6 @@ public final class SystemPlume {
    * @param key name of the property to look up
    * @return true iff the property has a string value that represents true
    */
-  @Pure
   public static boolean getBooleanSystemProperty(String key) {
     return getBooleanSystemProperty(key, false);
   }
@@ -263,7 +261,7 @@ public final class SystemPlume {
    * @param seconds the time window in which to compute the garbage collection CPU usage
    * @return a GC usage message string, or null
    */
-  public static @Nullable String gcUsageMessage(double cpuThreshold, int seconds) {
+  public static String gcUsageMessage(double cpuThreshold, int seconds) {
     double gcPercentage = SystemPlume.gcPercentage(seconds);
     if (gcPercentage < cpuThreshold) {
       return null;

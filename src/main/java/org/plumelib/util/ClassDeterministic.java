@@ -78,8 +78,8 @@ public class ClassDeterministic {
     "signedness", // ToStringComparator problem
     "mustcall:argument" // not sure; generics inference problem?
   })
-  public static <T> T @Nullable [] getEnumConstants(Class<T> c) {
-    @NonNull T[] result = c.getEnumConstants();
+  public static <T> T[] getEnumConstants(Class<T> c) {
+    T[] result = c.getEnumConstants();
     if (result == null) {
       return null;
     }

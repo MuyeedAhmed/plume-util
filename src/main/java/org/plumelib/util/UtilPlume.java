@@ -78,8 +78,7 @@ public final class UtilPlume {
    */
   @Deprecated // 2021-04-24
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (BitSet)
-  @Pure
-  public static boolean intersectionCardinalityAtLeast(BitSet a, BitSet b, @NonNegative int i) {
+  public static boolean intersectionCardinalityAtLeast(BitSet a, BitSet b, int i) {
     // Here are three implementation strategies to determine the
     // cardinality of the intersection:
     // 1. a.clone().and(b).cardinality()
@@ -116,9 +115,8 @@ public final class UtilPlume {
    */
   @Deprecated // 2021-04-24
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (BitSet)
-  @Pure
   public static boolean intersectionCardinalityAtLeast(
-      BitSet a, BitSet b, BitSet c, @NonNegative int i) {
+      BitSet a, BitSet b, BitSet c, int i) {
     // See comments in intersectionCardinalityAtLeast(BitSet, BitSet, int).
     // This is a copy of that.
 
@@ -147,7 +145,6 @@ public final class UtilPlume {
    */
   @Deprecated // 2021-04-24
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (BitSet)
-  @Pure
   public static int intersectionCardinality(BitSet a, BitSet b) {
     BitSet intersection = (BitSet) a.clone();
     intersection.and(b);
@@ -165,7 +162,6 @@ public final class UtilPlume {
    */
   @Deprecated // 2021-04-24
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (BitSet)
-  @Pure
   public static int intersectionCardinality(BitSet a, BitSet b, BitSet c) {
     BitSet intersection = (BitSet) a.clone();
     intersection.and(b);
@@ -270,7 +266,7 @@ public final class UtilPlume {
    * @deprecated use {@link FilesPlume#newFileReader}
    */
   @Deprecated // deprecated 2021-02-25
-  public static InputStreamReader fileReader(Path path, @Nullable String charsetName)
+  public static InputStreamReader fileReader(Path path, String charsetName)
       throws FileNotFoundException, IOException {
     return FilesPlume.newFileReader(path, charsetName);
   }
@@ -310,7 +306,7 @@ public final class UtilPlume {
    * @deprecated use {@link FilesPlume#newFileReader}
    */
   @Deprecated // deprecated 2021-02-25
-  public static InputStreamReader fileReader(File file, @Nullable String charsetName)
+  public static InputStreamReader fileReader(File file, String charsetName)
       throws FileNotFoundException, IOException {
     return FilesPlume.newFileReader(file, charsetName);
   }
@@ -371,7 +367,7 @@ public final class UtilPlume {
    * @deprecated use {@link FilesPlume#newBufferedFileReader}
    */
   @Deprecated // deprecated 2021-02-25
-  public static BufferedReader bufferedFileReader(String filename, @Nullable String charsetName)
+  public static BufferedReader bufferedFileReader(String filename, String charsetName)
       throws FileNotFoundException, IOException {
     return FilesPlume.newBufferedFileReader(filename);
   }
@@ -392,7 +388,7 @@ public final class UtilPlume {
    * @deprecated use {@link FilesPlume#newBufferedFileReader}
    */
   @Deprecated // deprecated 2021-02-25
-  public static BufferedReader bufferedFileReader(File file, @Nullable String charsetName)
+  public static BufferedReader bufferedFileReader(File file, String charsetName)
       throws FileNotFoundException, IOException {
     return FilesPlume.newBufferedFileReader(file, charsetName);
   }
@@ -608,7 +604,6 @@ public final class UtilPlume {
    * @deprecated use {@link FilesPlume#equalFiles}
    */
   @Deprecated // deprecated 2021-02-25
-  @Pure
   public static boolean equalFiles(String file1, String file2) {
     return equalFiles(file1, file2, false);
   }
@@ -624,7 +619,6 @@ public final class UtilPlume {
    */
   @Deprecated // deprecated 2021-02-25
   @SuppressWarnings({"allcheckers:purity", "lock"}) // reads files, side effects local state
-  @Pure
   public static boolean equalFiles(String file1, String file2, boolean trimLines) {
     try (LineNumberReader reader1 = UtilPlume.lineNumberFileReader(file1);
         LineNumberReader reader2 = UtilPlume.lineNumberFileReader(file2); ) {
@@ -951,7 +945,7 @@ public final class UtilPlume {
    * @param b value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(double @Nullable [] a, double @Nullable [] b) {
+  public static int hash(double[] a, double[] b) {
     return Objects.hash(Arrays.hashCode(a), Arrays.hashCode(b));
   }
 
@@ -962,7 +956,7 @@ public final class UtilPlume {
    * @param b value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(long @Nullable [] a, long @Nullable [] b) {
+  public static int hash(long[] a, long[] b) {
     return hash(hash(a), hash(b));
   }
 
@@ -1027,7 +1021,7 @@ public final class UtilPlume {
    * @deprecated use {@link Arrays#hashCode}
    */
   @Deprecated // use Arrays.hashCode; deprecated 2021-01-05
-  public static int hash(double @Nullable [] a) {
+  public static int hash(double[] a) {
     return Arrays.hashCode(a);
   }
 
@@ -1087,7 +1081,7 @@ public final class UtilPlume {
    * @deprecated use {@link Arrays#hashCode}
    */
   @Deprecated // use Arrays.hashCode; deprecated 2021-01-05
-  public static int hash(long @Nullable [] a) {
+  public static int hash(long[] a) {
     return Arrays.hashCode(a);
   }
 
@@ -1099,7 +1093,7 @@ public final class UtilPlume {
    * @deprecated use {@link String#hashCode}
    */
   @Deprecated // use String.hashCode; deprecated 2021-01-05
-  public static int hash(@Nullable String a) {
+  public static int hash(String a) {
     return (a == null) ? 0 : a.hashCode();
   }
 
@@ -1112,7 +1106,7 @@ public final class UtilPlume {
    * @deprecated use {@link Objects#hash}
    */
   @Deprecated // use Objects.hash; deprecated 2021-01-05
-  public static int hash(@Nullable String a, @Nullable String b) {
+  public static int hash(String a, String b) {
     return Objects.hash(a, b);
   }
 
@@ -1126,7 +1120,7 @@ public final class UtilPlume {
    * @deprecated use {@link Objects#hash}
    */
   @Deprecated // use Objects.hash; deprecated 2021-01-05
-  public static int hash(@Nullable String a, @Nullable String b, @Nullable String c) {
+  public static int hash(String a, String b, String c) {
     return Objects.hash(a, b, c);
   }
 
@@ -1138,7 +1132,7 @@ public final class UtilPlume {
    * @deprecated use {@link Arrays#hashCode}
    */
   @Deprecated // use Arrays.hashCode; deprecated 2021-01-05
-  public static int hash(@Nullable String @Nullable [] a) {
+  public static int hash(String[] a) {
     return Arrays.hashCode(a);
   }
 
@@ -1155,7 +1149,7 @@ public final class UtilPlume {
    */
   @Deprecated // use StringsPlume.mapToStringAndClass; deprecated 2020-12-02
   public static String mapToStringAndClass(
-      Map<? extends @Signed @PolyNull Object, ? extends @Signed @PolyNull Object> m) {
+      Map<? extends Object, ? extends Object> m) {
     return StringsPlume.mapToStringAndClass(m);
   }
 
@@ -1167,7 +1161,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#toStringAndClass}
    */
   @Deprecated // use StringsPlume.toStringAndClass; deprecated 2020-12-02
-  public static String toStringAndClass(@Nullable Object o) {
+  public static String toStringAndClass(Object o) {
     return StringsPlume.toStringAndClass(o);
   }
 
@@ -1218,7 +1212,6 @@ public final class UtilPlume {
    * @return true iff the property has value "true", "yes", or "1"
    * @deprecated use {@link getBooleanProperty}
    */
-  @Pure
   @Deprecated // 2021-03-28
   public static boolean propertyIsTrue(Properties p, String key) {
     return getBooleanProperty(p, key);
@@ -1236,7 +1229,6 @@ public final class UtilPlume {
    * @return true iff the property has value "true", "yes", or "1"
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // does not depend on object identity
-  @Pure
   public static boolean getBooleanProperty(Properties p, String key, boolean defaultValue) {
     String pvalue = p.getProperty(key);
     if (pvalue == null) {
@@ -1268,7 +1260,6 @@ public final class UtilPlume {
    * @param key name of the property to look up
    * @return true iff the property has value "true", "yes", or "1"
    */
-  @Pure
   public static boolean getBooleanProperty(Properties p, String key) {
     return getBooleanProperty(p, key, false);
   }
@@ -1284,7 +1275,7 @@ public final class UtilPlume {
    * @see Properties#getProperty
    * @see Properties#setProperty
    */
-  public static @Nullable String appendProperty(Properties p, String key, String value) {
+  public static String appendProperty(Properties p, String key, String value) {
     return (String) p.setProperty(key, p.getProperty(key, "") + value);
   }
 
@@ -1298,7 +1289,7 @@ public final class UtilPlume {
    * @param value value to set the property to, if it is not already set
    * @return the previous value of the property
    */
-  public static @Nullable String setDefaultMaybe(Properties p, String key, String value) {
+  public static String setDefaultMaybe(Properties p, String key, String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
       p.setProperty(key, value);
@@ -1392,7 +1383,7 @@ public final class UtilPlume {
     }
 
     StringBuilder result = new StringBuilder();
-    @IndexOrHigh("target") int lastend = 0;
+    int lastend = 0;
     int pos;
     while ((pos = target.indexOf(oldStr, lastend)) != -1) {
       result.append(target.substring(lastend, pos));
@@ -1468,7 +1459,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#prefixLines}
    */
   @Deprecated // use StringsPlume.prefixLines; deprecated 2020-12-02
-  public static String prefixLines(String prefix, @Nullable Object o) {
+  public static String prefixLines(String prefix, Object o) {
     return prefix + prefixLinesExceptFirst(prefix, o);
   }
 
@@ -1483,7 +1474,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#prefixLinesExceptFirst}
    */
   @Deprecated // use StringsPlume.prefixLinesExceptFirst; deprecated 2020-12-02
-  public static String prefixLinesExceptFirst(String prefix, @Nullable Object o) {
+  public static String prefixLinesExceptFirst(String prefix, Object o) {
     if (o == null) {
       return "null";
     }
@@ -1501,7 +1492,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#indentLines}
    */
   @Deprecated // use StringsPlume.indentLines; deprecated 2020-12-02
-  public static String indentLines(@NonNegative int indent, @Nullable Object o) {
+  public static String indentLines(int indent, Object o) {
     if (indent == 0) {
       return (o == null) ? "null" : o.toString();
     }
@@ -1520,7 +1511,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#indentLinesExceptFirst}
    */
   @Deprecated // use StringsPlume.indentLinesExceptFirst; deprecated 2020-12-02
-  public static String indentLinesExceptFirst(@NonNegative int indent, @Nullable Object o) {
+  public static String indentLinesExceptFirst(int indent, Object o) {
     if (indent == 0) {
       return (o == null) ? "null" : o.toString();
     }
@@ -1551,7 +1542,7 @@ public final class UtilPlume {
       s = s.substring(delimpos + 1);
     }
     resultList.add(s);
-    String[] result = resultList.toArray(new @NonNull String[resultList.size()]);
+    String[] result = resultList.toArray(new String[resultList.size()]);
     return result;
   }
 
@@ -1583,7 +1574,7 @@ public final class UtilPlume {
       s = s.substring(delimpos + delimlen);
     }
     resultList.add(s);
-    String[] result = resultList.toArray(new @NonNull String[resultList.size()]);
+    String[] result = resultList.toArray(new String[resultList.size()]);
     return result;
   }
 
@@ -1599,8 +1590,6 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#splitLines}
    */
   @SuppressWarnings("value:statically.executable.not.pure") // pure wrt `equals()` but not `==`
-  @SideEffectFree
-  @StaticallyExecutable
   @Deprecated // use StringsPlume.splitLines; deprecated 2020-12-02
   public static String[] splitLines(String s) {
     return s.split("\r\n?|\n\r?", -1);
@@ -1624,7 +1613,7 @@ public final class UtilPlume {
    */
   @Deprecated // use join(CharSequence, Object...) which has the arguments in the other order;
   // deprecated 2020-02-20
-  public static <T> String join(@Signed T[] a, CharSequence delim) {
+  public static <T> String join(T[] a, CharSequence delim) {
     if (a.length == 0) {
       return "";
     }
@@ -1655,7 +1644,7 @@ public final class UtilPlume {
    */
   @SafeVarargs
   @Deprecated // use StringsPlume.join; deprecated 2020-12-02
-  public static <T> String join(CharSequence delim, @Signed T... a) {
+  public static <T> String join(CharSequence delim, T... a) {
     if (a.length == 0) {
       return "";
     }
@@ -1681,7 +1670,7 @@ public final class UtilPlume {
   @SafeVarargs
   @SuppressWarnings("varargs")
   @Deprecated // use StringsPlume.joinLines; deprecated 2020-12-02
-  public static <T> String joinLines(@Signed T... a) {
+  public static <T> String joinLines(T... a) {
     return join(lineSep, a);
   }
 
@@ -1701,10 +1690,10 @@ public final class UtilPlume {
    */
   @Deprecated // use join(CharSequence, Iterable) which has the arguments in the other order;
   // deprecated 2020-12-02
-  public static String join(Iterable<? extends @Signed @PolyNull Object> v, CharSequence delim) {
+  public static String join(Iterable<? extends Object> v, CharSequence delim) {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
-    Iterator<? extends @Signed @PolyNull Object> itor = v.iterator();
+    Iterator<? extends Object> itor = v.iterator();
     while (itor.hasNext()) {
       if (first) {
         first = false;
@@ -1730,10 +1719,10 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#join}
    */
   @Deprecated // use StringsPlume.join; deprecated 2020-12-02
-  public static String join(CharSequence delim, Iterable<? extends @Signed @PolyNull Object> v) {
+  public static String join(CharSequence delim, Iterable<? extends Object> v) {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
-    Iterator<? extends @Signed @PolyNull Object> itor = v.iterator();
+    Iterator<? extends Object> itor = v.iterator();
     while (itor.hasNext()) {
       if (first) {
         first = false;
@@ -1755,7 +1744,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#joinLines}
    */
   @Deprecated // use StringsPlume.joinLines; deprecated 2020-12-02
-  public static String joinLines(Iterable<? extends @Signed @PolyNull Object> v) {
+  public static String joinLines(Iterable<? extends Object> v) {
     return join(lineSep, v);
   }
 
@@ -1786,7 +1775,7 @@ public final class UtilPlume {
   public static String escapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
     // The previous escape character was seen right before this position.
-    @IndexOrHigh("orig") int postEsc = 0;
+    int postEsc = 0;
     int origLen = orig.length();
     for (int i = 0; i < origLen; i++) {
       char c = orig.charAt(i);
@@ -1973,7 +1962,7 @@ public final class UtilPlume {
   public static String unescapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
     // The previous escape character was seen just before this position.
-    @LTEqLengthOf("orig") int postEsc = 0;
+    int postEsc = 0;
     int thisEsc = orig.indexOf('\\');
     while (thisEsc != -1) {
       if (thisEsc == orig.length() - 1) {
@@ -2201,7 +2190,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#lpad}
    */
   @Deprecated // use StringsPlume.lpad; deprecated 2020-12-02
-  public static String lpad(String s, @NonNegative int length) {
+  public static String lpad(String s, int length) {
     if (s.length() < length) {
       StringBuilder buf = new StringBuilder();
       for (int i = s.length(); i < length; i++) {
@@ -2223,7 +2212,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#rpad}
    */
   @Deprecated // use StringsPlume.rpad; deprecated 2020-12-02
-  public static String rpad(String s, @NonNegative int length) {
+  public static String rpad(String s, int length) {
     if (s.length() < length) {
       StringBuilder buf = new StringBuilder(s);
       for (int i = s.length(); i < length; i++) {
@@ -2244,7 +2233,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#rpad}
    */
   @Deprecated // use StringsPlume.rpad; deprecated 2020-12-02
-  public static String rpad(int num, @NonNegative int length) {
+  public static String rpad(int num, int length) {
     return rpad(String.valueOf(num), length);
   }
 
@@ -2257,7 +2246,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume#rpad}
    */
   @Deprecated // use StringsPlume.rpad; deprecated 2020-12-02
-  public static String rpad(double num, @NonNegative int length) {
+  public static String rpad(double num, int length) {
     return rpad(String.valueOf(num), length);
   }
 
@@ -2268,16 +2257,15 @@ public final class UtilPlume {
    */
   @Deprecated // 2020-12-02
   public static class NullableStringComparator
-      implements Comparator<@Nullable String>, Serializable {
+      implements Comparator<String>, Serializable {
     /** Unique identifier for serialization. If you add or remove fields, change this number. */
     static final long serialVersionUID = 20150812L;
 
     /** Create a new NullableStringComparator. */
     public NullableStringComparator() {}
 
-    @Pure
     @Override
-    public int compare(@Nullable String s1, @Nullable String s2) {
+    public int compare(String s1, String s2) {
       if (s1 == null) {
         if (s2 == null) {
           return 0;
@@ -2305,7 +2293,7 @@ public final class UtilPlume {
    * @deprecated use {@link StringsPlume.ObjectComparator}
    */
   @Deprecated // 2020-12-02
-  public static class ObjectComparator implements Comparator<@Nullable Object>, Serializable {
+  public static class ObjectComparator implements Comparator<Object>, Serializable {
     /** Unique identifier for serialization. If you add or remove fields, change this number. */
     static final long serialVersionUID = 20170420L;
 
@@ -2316,9 +2304,8 @@ public final class UtilPlume {
       "allcheckers:purity.not.deterministic.call",
       "lock"
     }) // toString is being used in a deterministic way
-    @Pure
     @Override
-    public int compare(@Nullable Object o1, @Nullable Object o2) {
+    public int compare(Object o1, Object o2) {
       // Make null compare smaller than anything else
       if ((o1 == o2)) {
         return 0;
@@ -2423,7 +2410,7 @@ public final class UtilPlume {
   // From
   // https://stackoverflow.com/questions/37413816/get-number-of-placeholders-in-formatter-format-string
   /** Regex that matches a format specifier. Some correspond to arguments and some do not. */
-  private static @Regex(6) Pattern formatSpecifier =
+  private static Pattern formatSpecifier =
       Pattern.compile("%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])");
 
   /**

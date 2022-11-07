@@ -34,7 +34,7 @@ public final class FuzzyFloatTest {
   }
 
   /** Initialize f2 to be the same as two copies of f1. */
-  void initializeF1AndF2(int j, double @ArrayLen(10) [] f1, double @ArrayLen(20) [] f2) {
+  void initializeF1AndF2(int j, double[] f1, double[] f2) {
 
     // start two arrays out exactly equal
     for (int i = 0; i < f1.length; i++) {
@@ -59,7 +59,6 @@ public final class FuzzyFloatTest {
   double offhigh2 = 1 + 2 * offset;
   double offlow2 = 1 - 2 * offset;
 
-  @Test
   public void test_eq() {
 
     // test equality for a variety of postive and negative numbers
@@ -94,7 +93,6 @@ public final class FuzzyFloatTest {
 
   // rudimentary checks on the comparison operators (since they all just
   // use eq and ne anyway)
-  @Test
   public void testcomparisons() {
 
     double d = 2563.789;
@@ -108,7 +106,6 @@ public final class FuzzyFloatTest {
     assertTrue(!ff.lte(d, d * offlow2));
   }
 
-  @Test
   public void test_indexOf() {
 
     // public int indexOf (double[] a, double elt)
@@ -195,7 +192,6 @@ public final class FuzzyFloatTest {
     }
   }
 
-  @Test
   public void test_isElemMatch() {
 
     // public boolean isElemMatch (double[] a1, double[] a2)
@@ -251,7 +247,6 @@ public final class FuzzyFloatTest {
     }
   }
 
-  @Test
   public void test_compare() {
 
     // public class DoubleArrayComparatorLexical implements Comparator
@@ -308,7 +303,6 @@ public final class FuzzyFloatTest {
     assertArraysEquals(a7, a7Copy);
   }
 
-  @Test
   public void test_isSubset() {
 
     // public boolean FuzzyFloat.isSubset (double[] a1, double[] a2)

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 })
 public final class OrderedPairIteratorTest {
 
-  @Test
   public void testOrderedPairIterator() {
     final int NULL = -2222;
 
@@ -181,10 +180,10 @@ public final class OrderedPairIteratorTest {
       "index:array.access.unsafe.high.range") // same length iterator and array, and while loop with
   // ++ on index
   public static void compareOrderedPairIterator(
-      OrderedPairIterator<Integer> opi, int[] @ArrayLen(2) [] ints) {
+      OrderedPairIterator<Integer> opi, int[][] ints) {
     int pairno = 0;
     while (opi.hasNext()) {
-      Pair<@Nullable Integer, @Nullable Integer> pair = opi.next();
+      Pair<Integer, Integer> pair = opi.next();
       // System.out.println("Iterator: <" + pair.a + "," + pair.b + ">, array: <" + ints[pairno][0]
       //     + "," + ints[pairno][1] + ">");
       assertTrue((pair.a == null) || (pair.a.intValue() == ints[pairno][0]));

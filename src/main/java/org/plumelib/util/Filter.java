@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * @param <T> the type of arguments to {@link #accept}
  */
-public interface Filter<T extends @Nullable Object> {
+public interface Filter<T extends Object> {
   /**
    * Tests whether a specified Object satisfies the filter.
    *

@@ -58,7 +58,7 @@ public final class ArraysPlume {
    * @param o the element to appear repeatedly in the returned array; must not be null
    * @return an array consisting of n copies of the specified object
    */
-  public static <T extends Object> T[] nCopies(@NonNegative int n, T o) {
+  public static <T extends Object> T[] nCopies(int n, T o) {
     @SuppressWarnings("unchecked")
     T[] result = (T[]) Array.newInstance(o.getClass(), n);
     Arrays.fill(result, o);
@@ -116,7 +116,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static int min(int[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(int[])");
@@ -135,7 +134,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static long min(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(long[])");
@@ -154,7 +152,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static double min(double[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(double[])");
@@ -173,7 +170,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Integer min(Integer[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Integer[])");
@@ -196,7 +192,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Long min(Long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Long[])");
@@ -219,7 +214,6 @@ public final class ArraysPlume {
    * @return the smallest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Double min(Double[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Double[])");
@@ -242,7 +236,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static int max(int[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(int[])");
@@ -261,7 +254,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static long max(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(long[])");
@@ -280,7 +272,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static double max(double[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(double[])");
@@ -299,7 +290,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Integer max(Integer[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
@@ -322,7 +312,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Long max(Long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
@@ -345,7 +334,6 @@ public final class ArraysPlume {
    * @return the largest value in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
   public static Double max(Double[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Double[])");
@@ -368,9 +356,9 @@ public final class ArraysPlume {
    * @return a two-element array containing the smallest and largest values in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @SideEffectFree // Deterministic up to .equals(), but not ==
+  // Deterministic up to .equals(), but not ==
   // @StaticallyExecutable
-  public static int @ArrayLen(2) [] minAndMax(int[] a) {
+  public static int[] minAndMax(int[] a) {
     if (a.length == 0) {
       // return null;
       throw new ArrayIndexOutOfBoundsException("Empty array passed to minAndMax(int[])");
@@ -391,9 +379,9 @@ public final class ArraysPlume {
    * @return a two-element array containing the smallest and largest values in the array
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @SideEffectFree // Deterministic up to .equals(), but not ==
+  // Deterministic up to .equals(), but not ==
   // @StaticallyExecutable
-  public static long @ArrayLen(2) [] minAndMax(long[] a) {
+  public static long[] minAndMax(long[] a) {
     if (a.length == 0) {
       // return null;
       throw new ArrayIndexOutOfBoundsException("Empty array passed to minAndMax(long[])");
@@ -414,8 +402,6 @@ public final class ArraysPlume {
    * @return the difference between the smallest and largest array elements
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
-  @StaticallyExecutable
   public static int elementRange(int[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
@@ -435,8 +421,6 @@ public final class ArraysPlume {
    * @return the difference between the smallest and largest array elements
    * @throws ArrayIndexOutOfBoundsException if the array has length 0
    */
-  @Pure
-  @StaticallyExecutable
   public static long elementRange(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(long[])");
@@ -459,8 +443,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return the sum of an array of integers
    */
-  @Pure
-  @StaticallyExecutable
   public static int sum(int[] a) {
     int sum = 0;
     for (int i = 0; i < a.length; i++) {
@@ -475,8 +457,6 @@ public final class ArraysPlume {
    * @param a a 2d array
    * @return the sum of all the elements of a 2d array of integers
    */
-  @Pure
-  @StaticallyExecutable
   public static int sum(int[][] a) {
     int sum = 0;
     for (int i = 0; i < a.length; i++) {
@@ -493,8 +473,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return the sum of an array of doubles
    */
-  @Pure
-  @StaticallyExecutable
   public static double sum(double[] a) {
     double sum = 0;
     for (int i = 0; i < a.length; i++) {
@@ -509,8 +487,6 @@ public final class ArraysPlume {
    * @param a a 2d array
    * @return the sum of all the elements of a 2d array of doubles
    */
-  @Pure
-  @StaticallyExecutable
   public static double sum(double[][] a) {
     double sum = 0;
     for (int i = 0; i < a.length; i++) {
@@ -536,8 +512,7 @@ public final class ArraysPlume {
    *     element is found in the array
    * @see java.util.List#indexOf(java.lang.Object)
    */
-  @Pure
-  public static <T extends @Nullable Object> int indexOf(T[] a, @Nullable Object elt) {
+  public static <T extends Object> int indexOf(T[] a, Object elt) {
     if (elt == null) {
       return indexOfEq(a, elt);
     }
@@ -562,12 +537,11 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in that section of the array
    * @see java.util.List#indexOf(java.lang.Object)
    */
-  @Pure
-  public static <T extends @Nullable Object> int indexOf(
+  public static <T extends Object> int indexOf(
       T[] a,
-      @Nullable Object elt,
-      @IndexFor("#1") int minindex,
-      @IndexOrHigh("#1") int indexlimit) {
+      Object elt,
+      int minindex,
+      int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
     }
@@ -589,8 +563,7 @@ public final class ArraysPlume {
    *     element is found in the list
    * @see java.util.List#indexOf(java.lang.Object)
    */
-  @Pure
-  public static int indexOf(List<? extends @PolyNull Object> a, Object elt) {
+  public static int indexOf(List<? extends Object> a, Object elt) {
     return a.indexOf(elt);
   }
 
@@ -606,12 +579,11 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in that section of the list
    * @see java.util.List#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(
-      List<? extends @PolyNull Object> a,
-      @Nullable Object elt,
-      @IndexFor("#1") @NonNegative int minindex,
-      @IndexOrHigh("#1") int indexlimit) {
+      List<? extends Object> a,
+      Object elt,
+      int minindex,
+      int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
     }
@@ -633,8 +605,7 @@ public final class ArraysPlume {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
-  public static int indexOfEq(@PolyNull Object[] a, @Nullable Object elt) {
+  public static int indexOfEq(Object[] a, Object elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
         return i;
@@ -655,12 +626,11 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in that section of the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOfEq(
-      @PolyNull Object[] a,
-      @Nullable Object elt,
-      @IndexFor("#1") int minindex,
-      @IndexOrHigh("#1") int indexlimit) {
+      Object[] a,
+      Object elt,
+      int minindex,
+      int indexlimit) {
     for (int i = minindex; i < indexlimit; i++) {
       if (elt == a[i]) {
         return i;
@@ -679,8 +649,7 @@ public final class ArraysPlume {
    *     the list
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
-  public static int indexOfEq(List<? extends @PolyNull Object> a, @Nullable Object elt) {
+  public static int indexOfEq(List<? extends Object> a, Object elt) {
     for (int i = 0; i < a.size(); i++) {
       if (elt == a.get(i)) {
         return i;
@@ -701,12 +670,11 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in that section of the list
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOfEq(
-      List<? extends @PolyNull Object> a,
-      @Nullable Object elt,
-      @IndexFor("#1") @NonNegative int minindex,
-      @IndexOrHigh("#1") int indexlimit) {
+      List<? extends Object> a,
+      Object elt,
+      int minindex,
+      int indexlimit) {
     for (int i = minindex; i < indexlimit; i++) {
       if (elt == a.get(i)) {
         return i;
@@ -724,7 +692,6 @@ public final class ArraysPlume {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(int[] a, int elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
@@ -743,7 +710,6 @@ public final class ArraysPlume {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(long[] a, long elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
@@ -765,9 +731,8 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(
-      int[] a, int elt, @IndexFor("#1") int minindex, @IndexOrHigh("#1") int indexlimit) {
+      int[] a, int elt, int minindex, int indexlimit) {
     for (int i = minindex; i < indexlimit; i++) {
       if (elt == a[i]) {
         return i;
@@ -788,9 +753,8 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(
-      long[] a, long elt, @IndexFor("#1") int minindex, @IndexOrHigh("#1") int indexlimit) {
+      long[] a, long elt, int minindex, int indexlimit) {
     for (int i = minindex; i < indexlimit; i++) {
       if (elt == a[i]) {
         return i;
@@ -808,7 +772,6 @@ public final class ArraysPlume {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(boolean[] a, boolean elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
@@ -827,7 +790,6 @@ public final class ArraysPlume {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(double[] a, double elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
@@ -849,9 +811,8 @@ public final class ArraysPlume {
    *     indexlimit}, or -1 if the element is not found in the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  @Pure
   public static int indexOf(
-      boolean[] a, boolean elt, @IndexFor("#1") int minindex, @IndexOrHigh("#1") int indexlimit) {
+      boolean[] a, boolean elt, int minindex, int indexlimit) {
     for (int i = minindex; i < indexlimit; i++) {
       if (elt == a[i]) {
         return i;
@@ -880,8 +841,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
-  public static int indexOf(@PolyNull Object[] a, @PolyNull Object[] sub) {
+  public static int indexOf(Object[] a, Object[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -906,8 +866,7 @@ public final class ArraysPlume {
   // requires that the component types be identical.  The signature should
   // be indexOfEq(@PolyNull(1) Object[], @PolyNull(2) Object[]), but the
   // @PolyNull qualifier does not yet take an argument.
-  @Pure
-  public static int indexOfEq(@PolyNull Object[] a, @PolyNull Object[] sub) {
+  public static int indexOfEq(Object[] a, Object[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -928,9 +887,8 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(
-      List<? extends @PolyNull @PolySigned Object> a, @PolyNull @PolySigned Object[] sub) {
+      List<? extends Object> a, Object[] sub) {
     int aIndexMax = a.size() - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -951,8 +909,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
-  public static int indexOfEq(List<?> a, @PolyNull Object[] sub) {
+  public static int indexOfEq(List<?> a, Object[] sub) {
     int aIndexMax = a.size() - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -973,9 +930,8 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(
-      @PolyNull @PolySigned Object[] a, List<? extends @PolyNull @PolySigned Object> sub) {
+      Object[] a, List<? extends Object> sub) {
     int aIndexMax = a.length - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -996,8 +952,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
-  public static int indexOfEq(@PolyNull Object[] a, List<?> sub) {
+  public static int indexOfEq(Object[] a, List<?> sub) {
     int aIndexMax = a.length - sub.size();
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -1018,7 +973,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(List<?> a, List<?> sub) {
     int aIndexMax = a.size() - sub.size();
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1040,7 +994,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOfEq(List<?> a, List<?> sub) {
     int aIndexMax = a.size() - sub.size();
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1061,7 +1014,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(int[] a, int[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1082,7 +1034,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(double[] a, double[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1103,7 +1054,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(long[] a, long[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1124,7 +1074,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  @Pure
   public static int indexOf(boolean[] a, boolean[] sub) {
     int aIndexMax = a.length - sub.length;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1161,12 +1110,11 @@ public final class ArraysPlume {
    * @param length the number of elements to include (not an end index, to avoid confusion over
    *     whether it would be the last included index or the first non-included index)
    */
-  @SideEffectFree
-  public static @PolyNull @PolyInterned Object[] subarray(
-      @PolyNull @PolyInterned Object[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyNull @PolyInterned Object[] result = new @PolyNull @PolyInterned Object[length];
+  public static @PolyInterned Object[] subarray(
+      @PolyInterned Object[] a,
+      int startindex,
+      int length) {
+    @PolyInterned Object[] result = new @PolyInterned Object[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1181,9 +1129,8 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a sublist of the given list
    */
-  @SideEffectFree
   public static <T> List<T> subarray(
-      List<T> a, @IndexFor("#1") int startindex, @IndexOrHigh("#1") int length) {
+      List<T> a, int startindex, int length) {
     return a.subList(startindex, startindex + length);
   }
 
@@ -1196,12 +1143,11 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
-  public static @PolyNull @PolyInterned String[] subarray(
-      @PolyNull @PolyInterned String[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyNull @PolyInterned String[] result = new @PolyNull @PolyInterned String[length];
+  public static @PolyInterned String[] subarray(
+      @PolyInterned String[] a,
+      int startindex,
+      int length) {
+    @PolyInterned String[] result = new @PolyInterned String[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1215,11 +1161,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static byte[] subarray(
       byte[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     byte[] result = new byte[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1234,11 +1179,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static boolean[] subarray(
       boolean[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     boolean[] result = new boolean[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1253,11 +1197,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static char[] subarray(
       char[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     char[] result = new char[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1272,11 +1215,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static double[] subarray(
       double[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     double[] result = new double[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1291,11 +1233,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static float[] subarray(
       float[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     float[] result = new float[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1310,11 +1251,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static int[] subarray(
       int[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     int[] result = new int[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1329,11 +1269,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static long[] subarray(
       long[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     long[] result = new long[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1348,11 +1287,10 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    * @return a subarray of the given array
    */
-  @SideEffectFree
   public static short[] subarray(
       short[] a,
-      @NonNegative int startindex,
-      @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+      int startindex,
+      int length) {
     short[] result = new short[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1372,11 +1310,10 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
   public static boolean isSubarray(
-      @PolyNull @PolySigned Object[] a,
-      @PolyNull @PolySigned Object[] sub,
-      @NonNegative int aOffset) {
+      Object[] a,
+      Object[] sub,
+      int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1398,9 +1335,8 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
   public static boolean isSubarrayEq(
-      @PolyNull Object[] a, @PolyNull Object[] sub, @NonNegative int aOffset) {
+      Object[] a, Object[] sub, int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1422,11 +1358,10 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
   public static boolean isSubarray(
-      @PolyNull @PolySigned Object[] a,
-      List<? extends @PolyNull @PolySigned Object> sub,
-      @NonNegative int aOffset) {
+      Object[] a,
+      List<? extends Object> sub,
+      int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1448,8 +1383,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarrayEq(@PolyNull Object[] a, List<?> sub, @NonNegative int aOffset) {
+  public static boolean isSubarrayEq(Object[] a, List<?> sub, int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1471,11 +1405,10 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
   public static boolean isSubarray(
-      List<? extends @PolyNull @PolySigned Object> a,
-      @PolyNull @PolySigned Object[] sub,
-      @NonNegative int aOffset) {
+      List<? extends Object> a,
+      Object[] sub,
+      int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1497,8 +1430,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarrayEq(List<?> a, @PolyNull Object[] sub, @NonNegative int aOffset) {
+  public static boolean isSubarrayEq(List<?> a, Object[] sub, int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1520,8 +1452,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarray(List<?> a, List<?> sub, @NonNegative int aOffset) {
+  public static boolean isSubarray(List<?> a, List<?> sub, int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1543,8 +1474,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarrayEq(List<?> a, List<?> sub, @NonNegative int aOffset) {
+  public static boolean isSubarrayEq(List<?> a, List<?> sub, int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1566,8 +1496,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarray(int[] a, int[] sub, @NonNegative int aOffset) {
+  public static boolean isSubarray(int[] a, int[] sub, int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1589,8 +1518,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarray(long[] a, long[] sub, @NonNegative int aOffset) {
+  public static boolean isSubarray(long[] a, long[] sub, int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1612,8 +1540,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarray(double[] a, double[] sub, @NonNegative int aOffset) {
+  public static boolean isSubarray(double[] a, double[] sub, int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1635,8 +1562,7 @@ public final class ArraysPlume {
    *     returns false if {@code aOffset} is too large to be a valid index for {@code a}.
    * @return true iff sub is a contiguous subarray of a
    */
-  @Pure
-  public static boolean isSubarray(boolean[] a, boolean[] sub, @NonNegative int aOffset) {
+  public static boolean isSubarray(boolean[] a, boolean[] sub, int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1684,7 +1610,6 @@ public final class ArraysPlume {
    * @param lst the list to convert to an array
    * @return the result of lst.toArray, casted to a more precise type than Object[]
    */
-  @SideEffectFree
   private static <T> T[] toTArray(List<T> lst) {
     @SuppressWarnings("unchecked")
     T[] asArray = (T[]) lst.toArray();
@@ -1697,19 +1622,19 @@ public final class ArraysPlume {
    *
    * @param <T> the type of array or list elements
    */
-  private static class ListOrArray<T extends @MustCallUnknown @Nullable Object> {
+  private static class ListOrArray<T extends Object> {
     // At most one field is non-null.  If both are null, this object represents the null value.
     /** The array that this object wraps, or null. */
-    T @Nullable [] theArray = null;
+    T[] theArray = null;
     /** The list that this object wraps, or null. */
-    @Nullable List<T> theList = null;
+    List<T> theList = null;
 
     /**
      * Creates a ListOrArray that wraps an array.
      *
      * @param theArray the delegate that will be wrapped
      */
-    ListOrArray(T @Nullable [] theArray) {
+    ListOrArray(T[] theArray) {
       this.theArray = theArray;
     }
 
@@ -1718,7 +1643,7 @@ public final class ArraysPlume {
      *
      * @param theList the delegate that will be wrapped
      */
-    ListOrArray(@Nullable List<T> theList) {
+    ListOrArray(List<T> theList) {
       this.theList = theList;
     }
 
@@ -1727,7 +1652,6 @@ public final class ArraysPlume {
      *
      * @return true if this represents a null value
      */
-    @Pure
     boolean isNull() {
       return theArray == null && theList == null;
     }
@@ -1737,8 +1661,7 @@ public final class ArraysPlume {
      *
      * @return the size of the collection this represents
      */
-    @Pure
-    @NonNegative int size() {
+    int size() {
       if (theArray != null) {
         return theArray.length;
       } else if (theList != null) {
@@ -1753,7 +1676,6 @@ public final class ArraysPlume {
      *
      * @return true if this represents an empty collection
      */
-    @Pure
     boolean isEmpty() {
       if (theArray != null) {
         return theArray.length == 0;
@@ -1769,7 +1691,6 @@ public final class ArraysPlume {
      *
      * @return an array with the same contents as this
      */
-    @SideEffectFree
     T[] toArray() {
       if (theArray != null) {
         return theArray;
@@ -1799,7 +1720,7 @@ public final class ArraysPlume {
             "lowerbound:assignment",
             "index:assignment"
           }) // index checker has no list support
-          @IndexFor("dest") int index = i + destPos;
+          int index = i + destPos;
           dest[index] = theList.get(i);
         }
       } else {
@@ -1812,7 +1733,7 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
-    @Nullable Class<? extends @Nullable Object> leastUpperBound() {
+    Class<? extends Object> leastUpperBound() {
       if (theArray != null) {
         return ReflectionPlume.leastUpperBound(theArray);
       } else if (theList != null) {
@@ -1823,7 +1744,7 @@ public final class ArraysPlume {
     }
 
     @Override
-    public String toString(@GuardSatisfied ListOrArray<T> this) {
+    public String toString(ListOrArray<T> this) {
       if (theArray != null) {
         return Arrays.toString(theArray);
       } else if (theList != null) {
@@ -1866,7 +1787,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T extends @Nullable Object> T[] concat(T @Nullable [] a, T @Nullable [] b) {
+  public static <T extends Object> T[] concat(T[] a, T[] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1879,7 +1800,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T extends @Nullable Object> T[] concat(T @Nullable [] a, @Nullable List<T> b) {
+  public static <T extends Object> T[] concat(T[] a, List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1892,7 +1813,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T extends @Nullable Object> T[] concat(@Nullable List<T> a, T @Nullable [] b) {
+  public static <T extends Object> T[] concat(List<T> a, T[] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1904,7 +1825,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T extends @Nullable Object> T[] concat(@Nullable List<T> a, @Nullable List<T> b) {
+  public static <T extends Object> T[] concat(List<T> a, List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1916,7 +1837,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  private static <T extends @Nullable Object> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
+  private static <T extends Object> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
     if (a.isNull() && b.isNull()) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
@@ -1964,9 +1885,9 @@ public final class ArraysPlume {
    * @param b the second array to concatenate
    * @return an array that concatenates the arguments
    */
-  public static @PolyNull @PolyInterned String[] concat(
-      @PolyNull @PolyInterned String @Nullable [] a,
-      @PolyNull @PolyInterned String @Nullable [] b) {
+  public static @PolyInterned String[] concat(
+      @PolyInterned String[] a,
+      @PolyInterned String[] b) {
     if (a == null || a.length == 0) {
       if (b == null) {
         return new String[0];
@@ -1977,7 +1898,7 @@ public final class ArraysPlume {
       if (b == null || b.length == 0) {
         return a;
       } else {
-        @PolyNull @PolyInterned String[] result = new String[a.length + b.length];
+        @PolyInterned String[] result = new String[a.length + b.length];
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
         return result;
@@ -1993,8 +1914,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static byte[] concat(byte @Nullable [] a, byte @Nullable [] b) {
+  public static byte[] concat(byte[] a, byte[] b) {
     if (a == null) {
       if (b == null) {
         return new byte[0];
@@ -2022,8 +1942,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static boolean[] concat(boolean @Nullable [] a, boolean @Nullable [] b) {
+  public static boolean[] concat(boolean[] a, boolean[] b) {
     if (a == null) {
       if (b == null) {
         return new boolean[0];
@@ -2051,8 +1970,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static char[] concat(char @Nullable [] a, char @Nullable [] b) {
+  public static char[] concat(char[] a, char[] b) {
     if (a == null) {
       if (b == null) {
         return new char[0];
@@ -2080,8 +1998,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static double[] concat(double @Nullable [] a, double @Nullable [] b) {
+  public static double[] concat(double[] a, double[] b) {
     if (a == null) {
       if (b == null) {
         return new double[0];
@@ -2109,8 +2026,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static float[] concat(float @Nullable [] a, float @Nullable [] b) {
+  public static float[] concat(float[] a, float[] b) {
     if (a == null) {
       if (b == null) {
         return new float[0];
@@ -2138,8 +2054,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static int[] concat(int @Nullable [] a, int @Nullable [] b) {
+  public static int[] concat(int[] a, int[] b) {
     if (a == null) {
       if (b == null) {
         return new int[0];
@@ -2167,8 +2082,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static long[] concat(long @Nullable [] a, long @Nullable [] b) {
+  public static long[] concat(long[] a, long[] b) {
     if (a == null) {
       if (b == null) {
         return new long[0];
@@ -2196,8 +2110,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  @SideEffectFree
-  public static short[] concat(short @Nullable [] a, short @Nullable [] b) {
+  public static short[] concat(short[] a, short[] b) {
     if (a == null) {
       if (b == null) {
         return new short[0];
@@ -2230,8 +2143,7 @@ public final class ArraysPlume {
    * @return a string representation of the array
    * @throws IllegalArgumentException if a is not an array
    */
-  @SideEffectFree
-  public static String toString(@Nullable Object a) {
+  public static String toString(Object a) {
     if (a == null) {
       return "null";
     } else if (a instanceof boolean[]) {
@@ -2268,8 +2180,7 @@ public final class ArraysPlume {
    * @return the length of the array
    * @throws IllegalArgumentException if obj is null or is not an array
    */
-  @Pure
-  public static @NonNegative int length(@Nullable Object a) throws IllegalArgumentException {
+  public static int length(Object a) throws IllegalArgumentException {
     if (a == null) {
       throw new IllegalArgumentException("Argument is null");
     } else if (a instanceof boolean[]) {
@@ -2304,8 +2215,7 @@ public final class ArraysPlume {
    * @return a string representation of the array
    * @see java.util.ArrayList#toString
    */
-  @SideEffectFree
-  public static String toString(@PolyNull Object @Nullable [] a) {
+  public static String toString(Object[] a) {
     return toString(a, false);
   }
 
@@ -2317,8 +2227,7 @@ public final class ArraysPlume {
    * @return a string representation of the array, with the elements quoted
    * @see java.util.ArrayList#toString
    */
-  @SideEffectFree
-  public static String toStringQuoted(@PolyNull Object @Nullable [] a) {
+  public static String toStringQuoted(Object[] a) {
     return toString(a, true);
   }
 
@@ -2333,8 +2242,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (string creation)
-  @SideEffectFree
-  public static String toString(@PolyNull Object @Nullable [] a, boolean quoted) {
+  public static String toString(Object[] a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -2358,9 +2266,8 @@ public final class ArraysPlume {
    * @return a string representation of the collection
    * @see java.util.ArrayList#toString
    */
-  @SideEffectFree
   public static String toString(
-      @Nullable Collection<? extends @PolyMustCall @Signed @PolyNull Object> a) {
+      Collection<? extends Object> a) {
     return toString(a, false);
   }
 
@@ -2372,9 +2279,8 @@ public final class ArraysPlume {
    * @return a string representation of the collection, with the elements quoted
    * @see java.util.ArrayList#toString
    */
-  @SideEffectFree
   public static String toStringQuoted(
-      @MustCallUnknown @Nullable Collection<? extends @PolyMustCall @Signed @PolyNull Object> a) {
+      Collection<? extends Object> a) {
     return toString(a, true);
   }
 
@@ -2388,9 +2294,8 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (string creation)
-  @SideEffectFree
   public static String toString(
-      @Nullable Collection<? extends @MustCallUnknown @Signed @PolyNull Object> a, boolean quoted) {
+      Collection<? extends Object> a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -2415,7 +2320,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff the array is sorted
    */
-  @Pure
   public static boolean sorted(int[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] < a[i]) {
@@ -2431,7 +2335,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff the array is sorted
    */
-  @Pure
   public static boolean sorted(long[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] < a[i]) {
@@ -2447,7 +2350,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff the array is sorted in descending order
    */
-  @Pure
   public static boolean isSortedDescending(int[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] > a[i]) {
@@ -2463,7 +2365,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff the array is sorted in descending order
    */
-  @Pure
   public static boolean isSortedDescending(long[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] > a[i]) {
@@ -2482,7 +2383,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(boolean[] a) {
     Set<Boolean> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2501,7 +2401,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(boolean[] a) {
     return !hasDuplicates(a);
   }
@@ -2515,7 +2414,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(byte[] a) {
     Set<Byte> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2534,7 +2432,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(byte[] a) {
     return !hasDuplicates(a);
   }
@@ -2548,7 +2445,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(char[] a) {
     Set<Character> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2567,7 +2463,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(char[] a) {
     return !hasDuplicates(a);
   }
@@ -2581,7 +2476,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(float[] a) {
     Set<Float> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2600,7 +2494,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(float[] a) {
     return !hasDuplicates(a);
   }
@@ -2614,7 +2507,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(short[] a) {
     Set<Short> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2633,7 +2525,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(short[] a) {
     return !hasDuplicates(a);
   }
@@ -2647,7 +2538,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(int[] a) {
     Set<Integer> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2666,7 +2556,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(int[] a) {
     return !hasDuplicates(a);
   }
@@ -2680,7 +2569,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(double[] a) {
     Set<Double> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2699,7 +2587,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(double[] a) {
     return !hasDuplicates(a);
   }
@@ -2713,7 +2600,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(long[] a) {
     Set<Long> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2732,7 +2618,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(long[] a) {
     return !hasDuplicates(a);
   }
@@ -2746,7 +2631,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(String[] a) {
     HashSet<String> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2765,7 +2649,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(String[] a) {
     return !hasDuplicates(a);
   }
@@ -2779,7 +2662,6 @@ public final class ArraysPlume {
    * @return true iff a contains duplicate elements
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean hasDuplicates(Object[] a) {
     HashSet<Object> hs = new HashSet<>();
     for (int i = 0; i < a.length; i++) {
@@ -2798,7 +2680,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @Pure
   public static boolean noDuplicates(Object[] a) {
     return !hasDuplicates(a);
   }
@@ -2815,7 +2696,6 @@ public final class ArraysPlume {
    */
   @Deprecated // 2021-04-09
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static <T> boolean noDuplicates(List<T> a) {
     if (a instanceof RandomAccess) {
       HashSet<T> hs = new HashSet<>();
@@ -2848,7 +2728,6 @@ public final class ArraysPlume {
    * @return true iff all elements of a are in [0..a.length) and a contains no duplicates.
    */
   @SuppressWarnings("allcheckers:purity") // side effect to local state (array)
-  @Pure
   public static boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
     boolean[] see = new boolean[a.length];
@@ -2868,7 +2747,6 @@ public final class ArraysPlume {
    * @param a an array, representing a function
    * @return true iff no element of a maps to -1
    */
-  @Pure
   public static boolean fnIsTotal(int[] a) {
     return indexOf(a, -1) == -1; // not found
   }
@@ -2879,7 +2757,7 @@ public final class ArraysPlume {
    * @param length the length of the result
    * @return fresh array that is the identity function of the given length
    */
-  public static int[] fnIdentity(@NonNegative int length) {
+  public static int[] fnIdentity(int length) {
     int[] result = new int[length];
     for (int i = 0; i < length; i++) {
       result[i] = i;
@@ -2894,7 +2772,6 @@ public final class ArraysPlume {
    * @return fresh array which is the inverse of the given permutation
    * @see #fnIsPermutation(int[])
    */
-  @SideEffectFree
   public static int[] fnInversePermutation(int[] a) {
     return fnInverse(a, a.length);
   }
@@ -2913,10 +2790,9 @@ public final class ArraysPlume {
     "allcheckers:purity",
     "lock:method.guarantee.violated"
   }) // side effect to local state
-  @SideEffectFree
-  public static int[] fnInverse(int[] a, @NonNegative int arange) {
+  public static int[] fnInverse(int[] a, int arange) {
     int[] result = new int[arange];
-    Arrays.fill(result, (@Signed int) -1);
+    Arrays.fill(result, (int) -1);
     for (int i = 0; i < a.length; i++) {
       int ai = a[i];
       if (ai < -1 || ai >= arange) {
@@ -2942,8 +2818,7 @@ public final class ArraysPlume {
    * @return function from [0..a.length) to range R that is the composition of a and b
    */
   @SuppressWarnings("allcheckers:purity") // side effect to local state
-  @SideEffectFree
-  public static int @SameLen("#1") [] fnCompose(@IndexFor("#2") int[] a, int[] b) {
+  public static int[] fnCompose(int[] a, int[] b) {
     int[] result = new int[a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
@@ -2961,8 +2836,7 @@ public final class ArraysPlume {
    *     b.
    */
   @SuppressWarnings("allcheckers:purity") // side effect to local state
-  @SideEffectFree
-  public static int @SameLen("#1") [] partialFnCompose(@IndexOrLow("#2") int[] a, int[] b) {
+  public static int[] partialFnCompose(int[] a, int[] b) {
     int[] result = new int[a.length];
     for (int i = 0; i < a.length; i++) {
       int inner = a[i];
@@ -2993,7 +2867,6 @@ public final class ArraysPlume {
    * @return true iff smaller is a subset of bigger
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean isSubset(long[] smaller, long[] bigger) {
     Set<Long> setBigger = new HashSet<>();
 
@@ -3024,7 +2897,6 @@ public final class ArraysPlume {
    * @return true iff smaller is a subset of bigger
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean isSubset(double[] smaller, double[] bigger) {
     Set<Double> setBigger = new HashSet<>();
 
@@ -3055,7 +2927,6 @@ public final class ArraysPlume {
    * @return true iff smaller is a subset of bigger
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // side effect to local state (HashSet)
-  @Pure
   public static boolean isSubset(String[] smaller, String[] bigger) {
     Set<String> setBigger = new HashSet<>();
 
@@ -3128,7 +2999,6 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     @Override
     public int compare(int[] a1, int[] a2) {
       if (a1 == a2) {
@@ -3175,7 +3045,6 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     @Override
     public int compare(long[] a1, long[] a2) {
       if (a1 == a2) {
@@ -3223,7 +3092,6 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     @Override
     public int compare(double[] a1, double[] a2) {
       if (a1 == a2) {
@@ -3272,13 +3140,12 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyNull(1) String[], @PolyNull(2) String[]), but the
     // @PolyNull qualifier does not yet take an argument.
     @Override
-    public int compare(@PolyNull String[] a1, @PolyNull String[] a2) {
+    public int compare(String[] a1, String[] a2) {
       if (a1 == a2) {
         return 0;
       }
@@ -3326,13 +3193,12 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyNull(1) T[], @PolyNull(2) T[]), but the
     // @PolyNull qualifier does not yet take an argument.
     @Override
-    public int compare(@PolyNull T[] a1, @PolyNull T[] a2) {
+    public int compare(T[] a1, T[] a2) {
       if (a1 == a2) {
         return 0;
       }
@@ -3397,13 +3263,12 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyNull(1) Object[], @PolyNull(2) Object[]), but the
     // @PolyNull qualifier does not yet take an argument.
     @Override
-    public int compare(@PolyNull Object[] a1, @PolyNull Object[] a2) {
+    public int compare(Object[] a1, Object[] a2) {
       if (a1 == a2) {
         return 0;
       }
@@ -3450,7 +3315,6 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     @Override
     public int compare(int[] a1, int[] a2) {
       if (a1 == a2) {
@@ -3500,7 +3364,6 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     @Override
     public int compare(long[] a1, long[] a2) {
       if (a1 == a2) {
@@ -3542,13 +3405,12 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyNull(1) T[], @PolyNull(2) T[]), but the
     // @PolyNull qualifier does not yet take an argument.
     @Override
-    public int compare(@PolyNull T[] a1, @PolyNull T[] a2) {
+    public int compare(T[] a1, T[] a2) {
       if (a1 == a2) {
         return 0;
       }
@@ -3621,13 +3483,12 @@ public final class ArraysPlume {
      * @return a negative integer, zero, or a positive integer, depending on whether the first
      *     argument is less than, equal to, or greater than the second argument
      */
-    @Pure
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyNull(1) Object[], @PolyNull(2) Object[]), but the
     // @PolyNull qualifier does not yet take an argument.
     @Override
-    public int compare(@PolyNull Object[] a1, @PolyNull Object[] a2) {
+    public int compare(Object[] a1, Object[] a2) {
       if (a1 == a2) {
         return 0;
       }
@@ -3654,13 +3515,12 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff some element of a is null (false if a is zero-sized)
    */
-  @Pure
-  public static boolean anyNull(@PolyNull Object[] a) {
+  public static boolean anyNull(Object[] a) {
     if (a.length == 0) {
       return false;
     }
     // The cast ensures that the right version of IndexOfEq gets called.
-    return indexOfEq(a, (@Nullable Object) null) >= 0;
+    return indexOfEq(a, (Object) null) >= 0;
   }
 
   /**
@@ -3669,8 +3529,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff all elements of a are null (unspecified result if a is zero-sized)
    */
-  @Pure
-  public static boolean allNull(@PolyNull Object[] a) {
+  public static boolean allNull(Object[] a) {
     for (int i = 0; i < a.length; i++) {
       if (!(a[i] == null)) {
         return false;
@@ -3685,13 +3544,12 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff some element of a is null (false if a is zero-sized)
    */
-  @Pure
-  public static boolean anyNull(List<? extends @Nullable Object> a) {
+  public static boolean anyNull(List<? extends Object> a) {
     if (a.size() == 0) {
       return false;
     }
     // The cast ensures that the right version of IndexOfEq gets called.
-    return indexOfEq(a, (@Nullable Object) null) >= 0;
+    return indexOfEq(a, (Object) null) >= 0;
   }
 
   /**
@@ -3700,7 +3558,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff all elements of a are null (unspecified result if a is zero-sized)
    */
-  @Pure
   public static boolean allNull(List<?> a) {
     for (int i = 0; i < a.size(); i++) {
       if (!(a.get(i) == null)) {
@@ -3724,8 +3581,8 @@ public final class ArraysPlume {
    * @param k number of subsets into which to partition {@code elts}
    * @return a list of partitionings, where each contains exactly k subsets
    */
-  public static <T extends @NonNull Object> List<Partitioning<T>> partitionInto(
-      Collection<T> elts, @NonNegative int k) {
+  public static <T extends Object> List<Partitioning<T>> partitionInto(
+      Collection<T> elts, int k) {
     return partitionInto(new ArrayDeque<T>(elts), k);
   }
 
@@ -3739,8 +3596,8 @@ public final class ArraysPlume {
    * @param k number of subsets into which to partition {@code elts}
    * @return a list of partitionings, where each contains exactly k subsets
    */
-  public static <T extends @NonNull Object> List<Partitioning<T>> partitionInto(
-      Queue<T> elts, @NonNegative int k) {
+  public static <T extends Object> List<Partitioning<T>> partitionInto(
+      Queue<T> elts, int k) {
     if (elts.size() < k) {
       throw new IllegalArgumentException();
     }
@@ -3761,11 +3618,11 @@ public final class ArraysPlume {
    */
   // "p.addToPart(i, ...)" is OK: i is < numNonemptyParts
   //  and p.size() = numNonemptyParts + numEmptyParts, both of which are non-negative.
-  public static <T extends @NonNull Object> List<Partitioning<T>> partitionIntoHelper(
+  public static <T extends Object> List<Partitioning<T>> partitionIntoHelper(
       Queue<T> elts,
       List</*@ LengthIs("#3")*/ Partitioning<T>> resultSoFar,
-      @NonNegative int numEmptyParts,
-      @NonNegative int numNonemptyParts) {
+      int numEmptyParts,
+      int numNonemptyParts) {
 
     if (numEmptyParts > elts.size()) {
       throw new IllegalArgumentException(numEmptyParts + " > " + elts.size());
@@ -3808,7 +3665,7 @@ public final class ArraysPlume {
   }
 
   /** A partitioning is a set of sets. It adds a few methods to {@code ArrayList<ArrayList<T>>}. */
-  static class Partitioning<T extends @NonNull Object> extends ArrayList<ArrayList<T>> {
+  static class Partitioning<T extends Object> extends ArrayList<ArrayList<T>> {
 
     /** Unique identifier for serialization. If you add or remove fields, change this number. */
     static final long serialVersionUID = 20170418;
@@ -3858,7 +3715,7 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
-    Partitioning<T> addToPart(@NonNegative int i, T elt) {
+    Partitioning<T> addToPart(int i, T elt) {
       Partitioning<T> result = new Partitioning<>(this);
       if (size() == i) {
         ArrayList<T> newPart = newArrayList(elt);

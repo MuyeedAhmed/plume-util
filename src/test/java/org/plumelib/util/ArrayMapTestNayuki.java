@@ -43,7 +43,6 @@ public final class ArrayMapTestNayuki {
 
   /* Test cases */
 
-  @Test
   public void testPut() {
     ArrayMap<String, Integer> map = new ArrayMap<String, Integer>();
     assertEquals(null, map.put("a", 9));
@@ -64,7 +63,6 @@ public final class ArrayMapTestNayuki {
     assertEquals((Integer) 2, map.put("h", 7));
   }
 
-  @Test
   public void testSize() {
     ArrayMap<String, Integer> map = new ArrayMap<String, Integer>();
     assertEquals(0, map.size());
@@ -80,7 +78,6 @@ public final class ArrayMapTestNayuki {
     assertEquals(5, map.size());
   }
 
-  @Test
   public void testMediumSimple() {
     Map<String, Integer> map = new ArrayMap<String, Integer>();
     for (int i = 0; i < 100; i++) {
@@ -91,7 +88,6 @@ public final class ArrayMapTestNayuki {
     }
   }
 
-  @Test
   public void testMediumSeesaw() {
     Map<String, Integer> map0 = new HashMap<String, Integer>();
     ArrayMap<String, Integer> map1 = new ArrayMap<String, Integer>();
@@ -126,7 +122,6 @@ public final class ArrayMapTestNayuki {
     }
   }
 
-  @Test
   public void testLargeRandomly() {
     Map<String, Integer> map0 = new HashMap<String, Integer>();
     ArrayMap<String, Integer> map1 = new ArrayMap<String, Integer>();
@@ -147,7 +142,6 @@ public final class ArrayMapTestNayuki {
     }
   }
 
-  @Test
   public void testIteratorDump() {
     for (int i = 0; i < 100; i++) {
       // Generate random data
@@ -178,7 +172,6 @@ public final class ArrayMapTestNayuki {
     }
   }
 
-  @Test
   public void testIteratorModifyRemove() {
     for (int i = 0; i < 100; i++) {
       // Generate random data

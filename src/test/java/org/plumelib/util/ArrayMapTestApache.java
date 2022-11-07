@@ -61,24 +61,24 @@ import org.junit.jupiter.api.Test;
 public class ArrayMapTestApache {
   static class MockMap extends AbstractMap {
     @Override
-    public Set entrySet(@GuardSatisfied MockMap this) {
+    public Set entrySet(MockMap this) {
       return Collections.EMPTY_SET;
     }
 
     @Override
-    public int size(@GuardSatisfied MockMap this) {
+    public int size(MockMap this) {
       return 0;
     }
   }
 
   private static class MockMapNull extends AbstractMap {
     @Override
-    public Set entrySet(@GuardSatisfied MockMapNull this) {
+    public Set entrySet(MockMapNull this) {
       return null;
     }
 
     @Override
-    public int size(@GuardSatisfied MockMapNull this) {
+    public int size(MockMapNull this) {
       return 10;
     }
   }
@@ -118,14 +118,12 @@ public class ArrayMapTestApache {
   Object @Nullable [] objArray;
   Object @Nullable [] objArray2;
   /** java.util.ArrayMap#ArrayMap() */
-  @Test
   public void test_Constructor() {
     // Test for method java.util.ArrayMap()
     ArrayMap hm2 = new ArrayMap();
     assertEquals(0, hm2.size());
   }
   /** java.util.ArrayMap#ArrayMap(int) */
-  @Test
   public void test_ConstructorI() {
     // Test for method java.util.ArrayMap(int)
     ArrayMap hm2 = new ArrayMap(5);
@@ -142,7 +140,6 @@ public class ArrayMapTestApache {
     assertTrue(empty.get("something") == "here"); // interned
   }
   /** java.util.ArrayMap#ArrayMap(int, float) */
-  @Test
   public void test_ConstructorIF() {
     // Test for method java.util.ArrayMap(int, float)
     ArrayMap hm2 = new ArrayMap(5);
@@ -153,7 +150,6 @@ public class ArrayMapTestApache {
     assertTrue(empty.get("something") == "here"); // interned
   }
   /** java.util.ArrayMap#ArrayMap(java.util.Map) */
-  @Test
   public void test_ConstructorLjava_util_Map() {
     // Test for method java.util.ArrayMap(java.util.Map)
     Map myMap = new TreeMap();
@@ -167,7 +163,6 @@ public class ArrayMapTestApache {
     assertEquals(hm, mockMap);
   }
   /** java.util.ArrayMap#clear() */
-  @Test
   public void test_clear() {
     hm.clear();
     assertEquals(0, hm.size());
@@ -184,7 +179,6 @@ public class ArrayMapTestApache {
     }
   }
   /** java.util.ArrayMap#clone() */
-  @Test
   public void test_clone() {
     // Test for method java.lang.Object java.util.ArrayMap.clone()
     ArrayMap hm2 = hm.clone();
@@ -221,7 +215,6 @@ public class ArrayMapTestApache {
     assertEquals(0, ((MockClonable) hm3.get(1)).i);
   }
   /** java.util.ArrayMap#containsKey(java.lang.Object) */
-  @Test
   public void test_containsKeyLjava_lang_Object() {
     // Test for method boolean
     // java.util.ArrayMap.containsKey(java.lang.Object)
@@ -233,7 +226,6 @@ public class ArrayMapTestApache {
     assertTrue(!m.containsKey(new Integer(0)));
   }
   /** java.util.ArrayMap#containsValue(java.lang.Object) */
-  @Test
   public void test_containsValueLjava_lang_Object() {
     // Test for method boolean
     // java.util.ArrayMap.containsValue(java.lang.Object)
@@ -241,7 +233,6 @@ public class ArrayMapTestApache {
     assertTrue(!hm.containsValue(new Integer(-9)));
   }
   /** java.util.ArrayMap#entrySet() */
-  @Test
   public void test_entrySet() {
     // Test for method java.util.Set java.util.ArrayMap.entrySet()
     Set s = hm.entrySet();
@@ -256,14 +247,12 @@ public class ArrayMapTestApache {
     assertEquals(101, s.size());
   }
   /** java.util.ArrayMap#entrySet() */
-  @Test
   public void test_entrySetEquals() {
     Set s1 = hm.entrySet();
     Set s2 = new ArrayMap(hm).entrySet();
     assertEquals(s1, s2);
   }
   /** java.util.ArrayMap#entrySet() */
-  @Test
   public void test_removeFromViews() {
     hm.put("A", null);
     hm.put("B", null);
@@ -273,7 +262,6 @@ public class ArrayMapTestApache {
     assertTrue(hm.entrySet().remove(m2.entrySet().iterator().next()));
   }
   /** java.util.ArrayMap#get(java.lang.Object) */
-  @Test
   public void test_getLjava_lang_Object() {
     // Test for method java.lang.Object
     // java.util.ArrayMap.get(java.lang.Object)
@@ -286,14 +274,12 @@ public class ArrayMapTestApache {
     assertNull(m.get(new Integer(0)));
   }
   /** java.util.ArrayMap#isEmpty() */
-  @Test
   public void test_isEmpty() {
     // Test for method boolean java.util.ArrayMap.isEmpty()
     assertTrue(new ArrayMap().isEmpty());
     assertTrue(!hm.isEmpty());
   }
   /** java.util.ArrayMap#keySet() */
-  @Test
   public void test_keySet() {
     // Test for method java.util.Set java.util.ArrayMap.keySet()
     Set s = hm.keySet();
@@ -338,7 +324,6 @@ public class ArrayMapTestApache {
     assertTrue(map2.keySet().iterator().next().equals(next));
   }
   /** java.util.ArrayMap#put(java.lang.Object, java.lang.Object) */
-  @Test
   public void test_putLjava_lang_ObjectLjava_lang_Object() {
     hm.put("KEY", "VALUE");
     assertEquals("VALUE", hm.get("KEY"));
@@ -397,12 +382,11 @@ public class ArrayMapTestApache {
     }
 
     @Override
-    public int hashCode(@GuardSatisfied MyKey this) {
+    public int hashCode(MyKey this) {
       return 0;
     }
   }
   /** java.util.ArrayMap#putAll(java.util.Map) */
-  @Test
   public void test_putAllLjava_util_Map() {
     // Test for method void java.util.ArrayMap.putAll(java.util.Map)
     ArrayMap hm2 = new ArrayMap();
@@ -415,7 +399,6 @@ public class ArrayMapTestApache {
     assertEquals(0, hm2.size());
   }
   /** java.util.ArrayMap#putAll(java.util.Map) */
-  @Test
   public void test_putAllLjava_util_Map_Null() {
     ArrayMap hashMap = new ArrayMap();
     try {
@@ -432,7 +415,6 @@ public class ArrayMapTestApache {
     }
   }
 
-  @Test
   public void test_putAllLjava_util_Map_Resize() {
     Random rnd = new Random(666);
     Map<Integer, Integer> m1 = new ArrayMap<Integer, Integer>();
@@ -455,7 +437,6 @@ public class ArrayMapTestApache {
     }
   }
   /** java.util.ArrayMap#remove(java.lang.Object) */
-  @Test
   public void test_removeLjava_lang_Object() {
     int size = hm.size();
     Integer y = new Integer(9);
@@ -492,13 +473,11 @@ public class ArrayMapTestApache {
     assertNull(map.get(0));
   }
   /** java.util.ArrayMap#size() */
-  @Test
   public void test_size() {
     // Test for method int java.util.ArrayMap.size()
     assertTrue(hm.size() == (objArray.length + 2));
   }
   /** java.util.ArrayMap#values() */
-  @Test
   public void test_values() {
     // Test for method java.util.Collection java.util.ArrayMap.values()
     Collection c = hm.values();
@@ -511,7 +490,6 @@ public class ArrayMapTestApache {
     assertTrue(!myArrayMap.containsValue(new Integer(0)));
   }
   /** java.util.AbstractMap#toString() */
-  @Test
   public void test_toString() {
     ArrayMap m = new ArrayMap();
     m.put(m, m);
@@ -527,12 +505,12 @@ public class ArrayMapTestApache {
     }
 
     @Override
-    public int hashCode(@GuardSatisfied ReusableKey this) {
+    public int hashCode(ReusableKey this) {
       return key;
     }
 
     @Override
-    public boolean equals(@GuardSatisfied ReusableKey this, @GuardSatisfied Object o) {
+    public boolean equals(ReusableKey this, Object o) {
       if (o == this) {
         return true;
       }
@@ -552,14 +530,13 @@ public class ArrayMapTestApache {
 
     @SuppressWarnings("allcheckers:purity.not.sideeffectfree.call")
     @Override
-    protected Object clone(@GuardSatisfied MockClonable this) throws CloneNotSupportedException {
+    protected Object clone(MockClonable this) throws CloneNotSupportedException {
       return new MockClonable(i);
     }
   }
   /*
    * Regression test for HY-4750
    */
-  @Test
   public void test_EntrySet() {
     ArrayMap map = new ArrayMap();
     map.put(new Integer(1), "ONE");
@@ -576,17 +553,17 @@ public class ArrayMapTestApache {
   private static class MockEntry implements Map.Entry {
     @SuppressWarnings("allcheckers:purity.not.deterministic.object.creation")
     @Override
-    public Object getKey(@GuardSatisfied MockEntry this) {
+    public Object getKey(MockEntry this) {
       return new Integer(1);
     }
 
     @Override
-    public Object getValue(@GuardSatisfied MockEntry this) {
+    public Object getValue(MockEntry this) {
       return "ONE";
     }
 
     @Override
-    public Object setValue(@GuardSatisfied MockEntry this, Object object) {
+    public Object setValue(MockEntry this, Object object) {
       return null;
     }
   }
@@ -594,7 +571,6 @@ public class ArrayMapTestApache {
    * Sets up the fixture, for example, open a network connection. This method is called before a
    * test is executed.
    */
-  @BeforeEach
   protected void setUp() {
     objArray = new Object[hmSize];
     objArray2 = new Object[hmSize];
@@ -610,14 +586,13 @@ public class ArrayMapTestApache {
     hm.put(null, "test");
   }
 
-  @AfterEach
   protected void tearDown() {
     hm = null;
     objArray = null;
     objArray2 = null;
   }
 
-  static class SubMap<K extends @GuardedBy Object, V extends @GuardedBy Object>
+  static class SubMap<K extends Object, V extends Object>
       extends ArrayMap<K, V> {
     public SubMap(Map<? extends K, ? extends V> m) {
       super(m);

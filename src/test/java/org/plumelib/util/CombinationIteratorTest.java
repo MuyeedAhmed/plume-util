@@ -16,7 +16,6 @@ public final class CombinationIteratorTest {
   List<String> c = Arrays.asList("c1", "c2", "c3");
   List<String> empty = Arrays.asList();
 
-  @Test
   public void test1() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(a, b, c));
     assert ci.hasNext();
@@ -41,7 +40,6 @@ public final class CombinationIteratorTest {
     assert !ci.hasNext();
   }
 
-  @Test
   public void test2() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(c, b, a));
     assert ci.hasNext();
@@ -66,7 +64,6 @@ public final class CombinationIteratorTest {
     assert !ci.hasNext();
   }
 
-  @Test
   public void test3() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(a));
     assert ci.hasNext();
@@ -79,7 +76,6 @@ public final class CombinationIteratorTest {
     assert !ci.hasNext();
   }
 
-  @Test
   public void test4() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(b));
     assert ci.hasNext();
@@ -89,35 +85,30 @@ public final class CombinationIteratorTest {
     assert !ci.hasNext();
   }
 
-  @Test
   public void testEmpty1() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(a, empty, c));
     assert !ci.hasNext();
     assert !ci.hasNext();
   }
 
-  @Test
   public void testEmpty2() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(empty, b, c));
     assert !ci.hasNext();
     assert !ci.hasNext();
   }
 
-  @Test
   public void testEmpty3() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(a, b, empty));
     assert !ci.hasNext();
     assert !ci.hasNext();
   }
 
-  @Test
   public void testEmpty4() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList(empty));
     assert !ci.hasNext();
     assert !ci.hasNext();
   }
 
-  @Test
   public void testEmpty5() {
     CombinationIterator<String> ci = new CombinationIterator<>(Arrays.asList());
     assert !ci.hasNext();

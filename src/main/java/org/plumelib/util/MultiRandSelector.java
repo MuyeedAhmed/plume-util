@@ -26,7 +26,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <T> the type of elements to be selected among
  * @see RandomSelector
  */
-public class MultiRandSelector<T extends @Nullable Object> {
+public class MultiRandSelector<T extends Object> {
 
   /** Whether to toss a coin or select a given number of elements. */
   private boolean coinTossMode;

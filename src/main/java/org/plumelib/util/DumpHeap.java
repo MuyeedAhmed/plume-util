@@ -21,14 +21,13 @@ public class DumpHeap {
    * The HotSpot Diagnostic MBean. Its type is Object, in case HotSpotDiagnosticMXBean is not
    * available at compile time.
    */
-  private static volatile @MonotonicNonNull Object hotspotMBean;
+  private static volatile Object hotspotMBean;
 
   /** The method com.sun.management.HotSpotDiagnosticMXBean#dumpHeap. */
-  private static @MonotonicNonNull Method dumpHeapMethod;
+  private static Method dumpHeapMethod;
 
   /** Initialize the fields of this class. */
   @SuppressWarnings({"nullness:assignment", "nullness:contracts.postcondition"}) // reflection
-  @EnsuresNonNull({"hotspotMBean", "dumpHeapMethod"})
   private static synchronized void initializeFields() {
     try {
       Class<?> mxbeanClass = Class.forName("com.sun.management.HotSpotDiagnosticMXBean");

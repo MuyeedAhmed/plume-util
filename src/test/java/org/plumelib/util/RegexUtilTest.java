@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 public final class RegexUtilTest {
 
-  @Test
   public void test_isRegex_and_asRegex() {
 
     String s1 = "colo(u?)r";
@@ -68,14 +67,14 @@ public final class RegexUtilTest {
   List<String> s5 = Arrays.asList(new String[] {"d", "ee", "fff"});
   List<String> s6 = Arrays.asList(new String[] {"a", "d", "ee", "fff"});
 
-  List<@Regex String> r1 = Arrays.asList(new @Regex String[] {});
-  List<@Regex String> r2 = Arrays.asList(new @Regex String[] {"a", "b", "c"});
-  List<@Regex String> r3 = Arrays.asList(new @Regex String[] {"a+", "b+", "c"});
-  List<@Regex String> r4 = Arrays.asList(new @Regex String[] {"a+", "b+", "c+"});
-  List<@Regex String> r5 = Arrays.asList(new @Regex String[] {".*"});
+  List<String> r1 = Arrays.asList(new String[] {});
+  List<String> r2 = Arrays.asList(new String[] {"a", "b", "c"});
+  List<String> r3 = Arrays.asList(new String[] {"a+", "b+", "c"});
+  List<String> r4 = Arrays.asList(new String[] {"a+", "b+", "c+"});
+  List<String> r5 = Arrays.asList(new String[] {".*"});
 
-  List<@Regex String> r6 = Arrays.asList(new @Regex String[] {"a?b", "a*"});
-  List<@Regex String> r7 = Arrays.asList(new @Regex String[] {"a?b+", "a*"});
+  List<String> r6 = Arrays.asList(new String[] {"a?b", "a*"});
+  List<String> r7 = Arrays.asList(new String[] {"a?b+", "a*"});
 
   List<String> empty = Collections.emptyList();
   List<String> onlyA = Arrays.asList(new String[] {"a"});
@@ -93,7 +92,6 @@ public final class RegexUtilTest {
   List<String> cd = Arrays.asList(new String[] {"c", "d"});
   List<String> eefff = Arrays.asList(new String[] {"ee", "fff"});
 
-  @Test
   public void test_matchesSomeRegex() {
     assertEquals(RegexUtil.matchesSomeRegex(s1, r1), empty);
     assertEquals(RegexUtil.matchesSomeRegex(s2, r1), empty);
@@ -166,7 +164,6 @@ public final class RegexUtilTest {
     assertTrue(RegexUtil.everyStringMatchesSomeRegex(s6, r5));
   }
 
-  @Test
   public void test_matchesNoRegex() {
     assertEquals(RegexUtil.matchesNoRegex(s1, r1), s1);
     assertEquals(RegexUtil.matchesNoRegex(s2, r1), s2);
@@ -239,7 +236,6 @@ public final class RegexUtilTest {
     assertFalse(RegexUtil.noStringMatchesAnyRegex(s6, r5));
   }
 
-  @Test
   public void test_r6() {
     assertEquals(ab, RegexUtil.matchesSomeRegex(s1, r6));
     assertEquals(ab, RegexUtil.matchesSomeRegex(s2, r6));

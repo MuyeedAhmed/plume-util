@@ -66,7 +66,7 @@ public final class FilesPlume {
    * @return an InputStream for file
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStream newFileInputStream(Path path) throws IOException {
+  public static InputStream newFileInputStream(Path path) throws IOException {
     FileInputStream fis = new FileInputStream(path.toFile());
     InputStream in;
     if (path.toString().endsWith(".gz")) {
@@ -94,7 +94,7 @@ public final class FilesPlume {
    * @return an InputStream for file
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStream newFileInputStream(File file) throws IOException {
+  public static InputStream newFileInputStream(File file) throws IOException {
     return newFileInputStream(file.toPath());
   }
 
@@ -111,7 +111,7 @@ public final class FilesPlume {
    * @throws IOException if there is trouble reading the file
    * @throws FileNotFoundException if the file is not found
    */
-  public static @Owning InputStreamReader newFileReader(String filename)
+  public static InputStreamReader newFileReader(String filename)
       throws FileNotFoundException, IOException {
     return newFileReader(new File(filename), null);
   }
@@ -129,7 +129,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStreamReader newFileReader(Path path)
+  public static InputStreamReader newFileReader(Path path)
       throws FileNotFoundException, IOException {
     return newFileReader(path.toFile(), null);
   }
@@ -148,7 +148,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStreamReader newFileReader(Path path, @Nullable String charsetName)
+  public static InputStreamReader newFileReader(Path path, String charsetName)
       throws FileNotFoundException, IOException {
     InputStream in = newFileInputStream(path.toFile());
     InputStreamReader fileReader;
@@ -173,7 +173,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStreamReader newFileReader(File file)
+  public static InputStreamReader newFileReader(File file)
       throws FileNotFoundException, IOException {
     return newFileReader(file, null);
   }
@@ -192,7 +192,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning InputStreamReader newFileReader(File file, @Nullable String charsetName)
+  public static InputStreamReader newFileReader(File file, String charsetName)
       throws FileNotFoundException, IOException {
     return newFileReader(file.toPath(), charsetName);
   }
@@ -214,7 +214,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning BufferedReader newBufferedFileReader(String filename)
+  public static BufferedReader newBufferedFileReader(String filename)
       throws FileNotFoundException, IOException {
     return newBufferedFileReader(filename, null);
   }
@@ -232,7 +232,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning BufferedReader newBufferedFileReader(File file)
+  public static BufferedReader newBufferedFileReader(File file)
       throws FileNotFoundException, IOException {
     return newBufferedFileReader(file, null);
   }
@@ -251,8 +251,8 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning BufferedReader newBufferedFileReader(
-      String filename, @Nullable String charsetName) throws FileNotFoundException, IOException {
+  public static BufferedReader newBufferedFileReader(
+      String filename, String charsetName) throws FileNotFoundException, IOException {
     return newBufferedFileReader(new File(filename), charsetName);
   }
 
@@ -270,8 +270,8 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning BufferedReader newBufferedFileReader(
-      File file, @Nullable String charsetName) throws FileNotFoundException, IOException {
+  public static BufferedReader newBufferedFileReader(
+      File file, String charsetName) throws FileNotFoundException, IOException {
     Reader fileReader = newFileReader(file, charsetName);
     return new BufferedReader(fileReader);
   }
@@ -289,7 +289,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning LineNumberReader newLineNumberFileReader(String filename)
+  public static LineNumberReader newLineNumberFileReader(String filename)
       throws FileNotFoundException, IOException {
     return newLineNumberFileReader(new File(filename));
   }
@@ -307,7 +307,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning LineNumberReader newLineNumberFileReader(File file)
+  public static LineNumberReader newLineNumberFileReader(File file)
       throws FileNotFoundException, IOException {
     Reader fileReader = newFileReader(file, null);
     return new LineNumberReader(fileReader);
@@ -329,7 +329,7 @@ public final class FilesPlume {
    * @return an OutputStream for file
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStream newFileOutputStream(Path path) throws IOException {
+  public static OutputStream newFileOutputStream(Path path) throws IOException {
     return newFileOutputStream(path, false);
   }
 
@@ -347,7 +347,7 @@ public final class FilesPlume {
    * @return an OutputStream for file
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStream newFileOutputStream(Path path, boolean append)
+  public static OutputStream newFileOutputStream(Path path, boolean append)
       throws IOException {
     FileOutputStream fis = new FileOutputStream(path.toFile(), append);
     OutputStream in;
@@ -376,7 +376,7 @@ public final class FilesPlume {
    * @return an OutputStream for file
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStream newFileOutputStream(File file) throws IOException {
+  public static OutputStream newFileOutputStream(File file) throws IOException {
     return newFileOutputStream(file.toPath());
   }
 
@@ -393,7 +393,7 @@ public final class FilesPlume {
    * @throws IOException if there is trouble reading the file
    * @throws FileNotFoundException if the file is not found
    */
-  public static @Owning OutputStreamWriter newFileWriter(String filename)
+  public static OutputStreamWriter newFileWriter(String filename)
       throws FileNotFoundException, IOException {
     return newFileWriter(new File(filename), null);
   }
@@ -411,7 +411,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStreamWriter newFileWriter(Path path)
+  public static OutputStreamWriter newFileWriter(Path path)
       throws FileNotFoundException, IOException {
     return newFileWriter(path.toFile(), null);
   }
@@ -430,7 +430,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStreamWriter newFileWriter(Path path, @Nullable String charsetName)
+  public static OutputStreamWriter newFileWriter(Path path, String charsetName)
       throws FileNotFoundException, IOException {
     OutputStream in = newFileOutputStream(path.toFile());
     OutputStreamWriter fileWriter;
@@ -455,7 +455,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStreamWriter newFileWriter(File file)
+  public static OutputStreamWriter newFileWriter(File file)
       throws FileNotFoundException, IOException {
     return newFileWriter(file, null);
   }
@@ -474,7 +474,7 @@ public final class FilesPlume {
    * @throws FileNotFoundException if the file cannot be found
    * @throws IOException if there is trouble reading the file
    */
-  public static @Owning OutputStreamWriter newFileWriter(File file, @Nullable String charsetName)
+  public static OutputStreamWriter newFileWriter(File file, String charsetName)
       throws FileNotFoundException, IOException {
     return newFileWriter(file.toPath(), charsetName);
   }
@@ -495,7 +495,7 @@ public final class FilesPlume {
    * @return a BufferedWriter for filename
    * @throws IOException if there is trouble writing the file
    */
-  public static @Owning BufferedWriter newBufferedFileWriter(String filename) throws IOException {
+  public static BufferedWriter newBufferedFileWriter(String filename) throws IOException {
     return newBufferedFileWriter(filename, false);
   }
 
@@ -513,7 +513,7 @@ public final class FilesPlume {
    * @return a BufferedOutputStream for filename
    * @throws IOException if there is trouble writing the file
    */
-  public static @Owning BufferedOutputStream newBufferedFileOutputStream(
+  public static BufferedOutputStream newBufferedFileOutputStream(
       String filename, boolean append) throws IOException {
     OutputStream os = newFileOutputStream(new File(filename).toPath(), append);
     return new BufferedOutputStream(os);
@@ -534,7 +534,7 @@ public final class FilesPlume {
    * @throws IOException if there is trouble writing the file
    */
   // Question:  should this be rewritten as a wrapper around newBufferedFileOutputStream?
-  public static @Owning BufferedWriter newBufferedFileWriter(String filename, boolean append)
+  public static BufferedWriter newBufferedFileWriter(String filename, boolean append)
       throws IOException {
     if (filename.endsWith(".gz")) {
       return new BufferedWriter(
@@ -629,7 +629,6 @@ public final class FilesPlume {
    * @param file2 second file to compare
    * @return true iff the files have the same contents
    */
-  @Pure
   public static boolean equalFiles(String file1, String file2) {
     return equalFiles(file1, file2, false);
   }
@@ -643,7 +642,6 @@ public final class FilesPlume {
    * @return true iff the files have the same contents
    */
   @SuppressWarnings({"allcheckers:purity", "lock"}) // reads files, side effects local state
-  @Pure
   public static boolean equalFiles(String file1, String file2, boolean trimLines) {
     try (LineNumberReader reader1 = newLineNumberFileReader(file1);
         LineNumberReader reader2 = newLineNumberFileReader(file2); ) {

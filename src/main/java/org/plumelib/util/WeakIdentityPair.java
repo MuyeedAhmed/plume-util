@@ -70,8 +70,7 @@ public class WeakIdentityPair<T1 extends Object, T2 extends Object> {
    *
    * @return the first element of the pail, or null if it has been garbage-collected
    */
-  @SideEffectFree
-  public @Nullable T1 getA(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
+  public T1 getA(WeakIdentityPair<T1, T2> this) {
     return a.get();
   }
 
@@ -80,23 +79,20 @@ public class WeakIdentityPair<T1 extends Object, T2 extends Object> {
    *
    * @return the second element of the pair, or null if it has been garbage-collected
    */
-  @SideEffectFree
-  public @Nullable T2 getB(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
+  public T2 getB(WeakIdentityPair<T1, T2> this) {
     return b.get();
   }
 
   @Override
-  @SideEffectFree
-  public String toString(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
+  public String toString(WeakIdentityPair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
   @SuppressWarnings({"interning", "allcheckers:purity.not.deterministic.call", "lock"})
   // not @Deterministic: values can change by being garbage-collected
-  @SideEffectFree
   public boolean equals(
-      @GuardSatisfied WeakIdentityPair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
+      @GuardSatisfied WeakIdentityPair<T1, T2> this, @GuardSatisfied Object obj) {
     if (!(obj instanceof WeakIdentityPair<?, ?>)) {
       return false;
     }
@@ -108,10 +104,10 @@ public class WeakIdentityPair<T1 extends Object, T2 extends Object> {
       return false;
     }
 
-    @Nullable T1 a = getA();
-    @Nullable T2 b = getB();
-    @Nullable T1 oa = other.getA();
-    @Nullable T2 ob = other.getB();
+    T1 a = getA();
+    T2 b = getB();
+    T1 oa = other.getA();
+    T2 ob = other.getB();
     if (a == null || b == null || oa == null || ob == null) {
       // false if any of the components has been garbage-collected
       return false;
@@ -120,8 +116,7 @@ public class WeakIdentityPair<T1 extends Object, T2 extends Object> {
   }
 
   @Override
-  @Pure
-  public int hashCode(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
+  public int hashCode(WeakIdentityPair<T1, T2> this) {
     return hashCode;
   }
 }

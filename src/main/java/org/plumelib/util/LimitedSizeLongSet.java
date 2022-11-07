@@ -35,11 +35,11 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    * If null, then at least numValues distinct values have been seen. The size is not separately
    * stored, because that would take extra space.
    */
-  protected long @Nullable @MinLen(1) [] values;
+  protected long[] values;
   /** The number of active elements (equivalently, the first unused index). */
   // Not exactly @IndexOrHigh("values"), because the invariant is broken when
   // the values field is set to null. Warnings are suppressed when breaking the invariant.
-  @IndexOrHigh("values") int numValues;
+  int numValues;
 
   /** Whether assertions are enabled. */
   private static boolean assertsEnabled = false;
@@ -54,7 +54,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  public LimitedSizeLongSet(@Positive int maxValues) {
+  public LimitedSizeLongSet(int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
@@ -117,7 +117,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
       @SuppressWarnings(
           "index:assignment" // svalues is the internal rep of s, and s.size() <= s.values.length
       )
-      @IndexFor("svalues") int index = i;
+      int index = i;
       add(svalues[index]);
       if (repNulled()) {
         return; // optimization, not necessary for correctness
@@ -131,7 +131,6 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    * @param elt the element whose membership to test
    * @return true if this set contains {@code elt}
    */
-  @Pure
   public boolean contains(long elt) {
     if (repNulled()) {
       throw new UnsupportedOperationException();
@@ -150,8 +149,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    *
    * @return a number that is a lower bound on the number of elements added to the set
    */
-  @Pure
-  public int size(@GuardSatisfied LimitedSizeLongSet this) {
+  public int size(LimitedSizeLongSet this) {
     return numValues;
   }
 
@@ -163,7 +161,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    */
   @SuppressWarnings(
       "lowerbound") // https://tinyurl.com/cfissue/1606: nulling the rep leaves numValues positive
-  public @Positive int maxSize() {
+  public int maxSize() {
     if (repNulled()) {
       return numValues;
     } else {
@@ -177,9 +175,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    *
    * @return true if this set has been filled to capacity and its internal representation is nulled
    */
-  @EnsuresNonNullIf(result = false, expression = "values")
-  @Pure
-  public boolean repNulled(@GuardSatisfied LimitedSizeLongSet this) {
+  public boolean repNulled(LimitedSizeLongSet this) {
     return values == null;
   }
 
@@ -199,9 +195,8 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
 
   @SuppressWarnings(
       "allcheckers:purity.not.sideeffectfree.assign.field") // side effect to local state (clone)
-  @SideEffectFree
   @Override
-  public LimitedSizeLongSet clone(@GuardSatisfied LimitedSizeLongSet this) {
+  public LimitedSizeLongSet clone(LimitedSizeLongSet this) {
     LimitedSizeLongSet result;
     try {
       result = (LimitedSizeLongSet) super.clone();
@@ -222,7 +217,7 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
    * @param slist a list of LimitedSizeLongSet, whose elements will be merged
    * @return a LimitedSizeLongSet that merges the elements of slist
    */
-  public static LimitedSizeLongSet merge(@Positive int maxValues, List<LimitedSizeLongSet> slist) {
+  public static LimitedSizeLongSet merge(int maxValues, List<LimitedSizeLongSet> slist) {
     LimitedSizeLongSet result = new LimitedSizeLongSet(maxValues);
     for (LimitedSizeLongSet s : slist) {
       result.addAll(s);
@@ -230,9 +225,8 @@ public class LimitedSizeLongSet implements Serializable, Cloneable {
     return result;
   }
 
-  @SideEffectFree
   @Override
-  public String toString(@GuardSatisfied LimitedSizeLongSet this) {
+  public String toString(LimitedSizeLongSet this) {
     return ("[size=" + size() + "; " + Arrays.toString(values) + "]");
   }
 }

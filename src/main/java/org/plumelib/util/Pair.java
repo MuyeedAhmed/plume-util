@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * @param <T1> the type of the first element of the pair
  * @param <T2> the type of the second element of the pair
  */
-public class Pair<T1 extends @Nullable Object, T2 extends @Nullable Object> {
+public class Pair<T1 extends Object, T2 extends Object> {
   /** The first element of the pair. */
   public T1 a;
   /** The second element of the pair. */
@@ -39,19 +39,17 @@ public class Pair<T1 extends @Nullable Object, T2 extends @Nullable Object> {
    * @param b second argument
    * @return a pair of the values (a, b)
    */
-  public static <A extends @Nullable Object, B extends @Nullable Object> Pair<A, B> of(A a, B b) {
+  public static <A extends Object, B extends Object> Pair<A, B> of(A a, B b) {
     return new Pair<>(a, b);
   }
 
   @Override
-  @SideEffectFree
-  public String toString(@GuardSatisfied Pair<T1, T2> this) {
+  public String toString(Pair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
-  @Pure
-  public boolean equals(@GuardSatisfied Pair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
+  public boolean equals(Pair<T1, T2> this, Object obj) {
     if (!(obj instanceof Pair<?, ?>)) {
       return false;
     }
@@ -66,8 +64,7 @@ public class Pair<T1 extends @Nullable Object, T2 extends @Nullable Object> {
   // (And if they aren't final, it's a bit odd to be calling hashCode.)
   // But then the class would not be useful for mutable pairs.
   @Override
-  @Pure
-  public int hashCode(@GuardSatisfied Pair<T1, T2> this) {
+  public int hashCode(Pair<T1, T2> this) {
     return (((a == null) ? 0 : a.hashCode()) + ((b == null) ? 0 : b.hashCode()));
   }
 }

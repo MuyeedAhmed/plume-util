@@ -60,7 +60,6 @@ public final class StringsPlume {
    *     target if it does not start with oldStr
    */
   @SuppressWarnings("index:argument") // startsWith implies indexes fit
-  @SideEffectFree
   public static String replacePrefix(String target, String oldStr, String newStr) {
     if (target.startsWith(oldStr)) {
       if (newStr.isEmpty()) {
@@ -87,7 +86,6 @@ public final class StringsPlume {
    *     target if it does not start with oldStr
    */
   @SuppressWarnings("lowerbound:argument") // endsWith implies indexes fit
-  @SideEffectFree
   public static String replaceSuffix(String target, String oldStr, String newStr) {
     if (target.endsWith(oldStr)) {
       if (newStr.isEmpty()) {
@@ -125,8 +123,7 @@ public final class StringsPlume {
    * @param o the value to be printed
    * @return the printed representation of {@code o}, with each line prefixed by the given prefix
    */
-  @SideEffectFree
-  public static String prefixLines(String prefix, @Nullable Object o) {
+  public static String prefixLines(String prefix, Object o) {
     return prefix + prefixLinesExceptFirst(prefix, o);
   }
 
@@ -139,8 +136,7 @@ public final class StringsPlume {
    * @return the printed representation of {@code o}, with each line (except the first) prefixed by
    *     the given prefix
    */
-  @SideEffectFree
-  public static String prefixLinesExceptFirst(String prefix, @Nullable Object o) {
+  public static String prefixLinesExceptFirst(String prefix, Object o) {
     if (o == null) {
       return "null";
     }
@@ -156,8 +152,7 @@ public final class StringsPlume {
    * @return the printed representation of {@code o}, with each line prefixed by {@code indent}
    *     space characters
    */
-  @SideEffectFree
-  public static String indentLines(@NonNegative int indent, @Nullable Object o) {
+  public static String indentLines(int indent, Object o) {
     if (indent == 0) {
       return (o == null) ? "null" : o.toString();
     }
@@ -174,8 +169,7 @@ public final class StringsPlume {
    * @return the printed representation of {@code o}, with each line (except the first) prefixed by
    *     {@code indent} space characters
    */
-  @SideEffectFree
-  public static String indentLinesExceptFirst(@NonNegative int indent, @Nullable Object o) {
+  public static String indentLinesExceptFirst(int indent, Object o) {
     if (indent == 0) {
       return (o == null) ? "null" : o.toString();
     }
@@ -197,8 +191,6 @@ public final class StringsPlume {
    * @return an array of Strings, one for each line in the argument
    */
   @SuppressWarnings("value:statically.executable.not.pure") // pure wrt `equals()` but not `==`
-  @SideEffectFree
-  @StaticallyExecutable
   public static String[] splitLines(String s) {
     return s.split("\r\n?|\n\r?", -1);
   }
@@ -222,9 +214,8 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call" // side effect to local state
   })
   @SafeVarargs
-  @SideEffectFree
-  public static <T extends @MustCallUnknown Object> String join(
-      CharSequence delim, @Signed T... a) {
+  public static <T extends Object> String join(
+      CharSequence delim, T... a) {
     if (a.length == 0) {
       return "";
     }
@@ -248,8 +239,7 @@ public final class StringsPlume {
    */
   @SafeVarargs
   @SuppressWarnings("varargs")
-  @SideEffectFree
-  public static <T extends @MustCallUnknown Object> String joinLines(@Signed T... a) {
+  public static <T extends Object> String joinLines(T... a) {
     return join(lineSep, a);
   }
 
@@ -269,13 +259,12 @@ public final class StringsPlume {
     "lock:method.guarantee.violated", // side effect to local state
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
   })
-  @SideEffectFree
   public static String join(
       CharSequence delim,
-      @MustCallUnknown Iterable<? extends @Signed @PolyNull @MustCallUnknown Object> v) {
+      Iterable<? extends Object> v) {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
-    Iterator<? extends @Signed @PolyNull @MustCallUnknown Object> itor = v.iterator();
+    Iterator<? extends Object> itor = v.iterator();
     while (itor.hasNext()) {
       if (first) {
         first = false;
@@ -295,9 +284,8 @@ public final class StringsPlume {
    * @param v list of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  @SideEffectFree
   public static String joinLines(
-      @MustCallUnknown Iterable<? extends @Signed @PolyNull @MustCallUnknown Object> v) {
+      Iterable<? extends Object> v) {
     return join(lineSep, v);
   }
 
@@ -322,11 +310,10 @@ public final class StringsPlume {
     "lock:method.guarantee.violated", // side effect to local state
     "allcheckers:purity.not.sideeffectfree.call" // side effect to local state
   })
-  @SideEffectFree
   public static String escapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
     // The previous escape character was seen right before this position.
-    @IndexOrHigh("orig") int postEsc = 0;
+    int postEsc = 0;
     int origLen = orig.length();
     for (int i = 0; i < origLen; i++) {
       char c = orig.charAt(i);
@@ -417,7 +404,6 @@ public final class StringsPlume {
    * @deprecated use {@link #escapeJava(String)} or {@link #charLiteral(Character)}
    */
   @Deprecated // 2021-03-14
-  @SideEffectFree
   public static String escapeJava(Character ch) {
     return escapeJava(ch.charValue());
   }
@@ -431,7 +417,6 @@ public final class StringsPlume {
    * @deprecated use {@link #escapeJava(String)} or {@link #charLiteral(char)}
    */
   @Deprecated // 2021-03-14
-  @SideEffectFree
   public static String escapeJava(char c) {
     switch (c) {
       case '\"':
@@ -459,7 +444,6 @@ public final class StringsPlume {
    * @param ch character to quote
    * @return quoted version of ch
    */
-  @SideEffectFree
   public static String charLiteral(Character ch) {
     return charLiteral(ch.charValue());
   }
@@ -470,7 +454,6 @@ public final class StringsPlume {
    * @param c character to quote
    * @return quoted version of ch
    */
-  @SideEffectFree
   public static String charLiteral(char c) {
     switch (c) {
       case '\'':
@@ -503,7 +486,6 @@ public final class StringsPlume {
     "lock:method.guarantee.violated", // side effect to local state
     "allcheckers:purity.not.sideeffectfree.call" // side effect to local state
   })
-  @SideEffectFree
   public static String escapeNonASCII(String orig) {
     StringBuilder sb = new StringBuilder();
     int origLen = orig.length();
@@ -565,11 +547,10 @@ public final class StringsPlume {
     "lock:method.guarantee.violated", // side effect to local state
     "allcheckers:purity.not.sideeffectfree.call" // side effect to local state
   })
-  @SideEffectFree
   public static String unescapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
     // The previous escape character was seen just before this position.
-    @LTEqLengthOf("orig") int postEsc = 0;
+    int postEsc = 0;
     int thisEsc = orig.indexOf('\\');
     while (thisEsc != -1) {
       if (thisEsc == orig.length() - 1) {
@@ -690,7 +671,6 @@ public final class StringsPlume {
    * @param delimiter string to remove whitespace abutting
    * @return version of arg, with whitespace abutting delimiter removed
    */
-  @SideEffectFree
   public static String removeWhitespaceAround(String arg, String delimiter) {
     arg = removeWhitespaceBefore(arg, delimiter);
     arg = removeWhitespaceAfter(arg, delimiter);
@@ -704,7 +684,6 @@ public final class StringsPlume {
    * @param delimiter a non-empty string to remove whitespace after
    * @return version of arg, with whitespace after delimiter removed
    */
-  @SideEffectFree
   public static String removeWhitespaceAfter(String arg, String delimiter) {
     if (delimiter.isEmpty()) {
       throw new IllegalArgumentException("Bad delimiter: \"" + delimiter + "\"");
@@ -738,7 +717,6 @@ public final class StringsPlume {
    * @param delimiter a non-empty string to remove whitespace before
    * @return version of arg, with whitespace before delimiter removed
    */
-  @SideEffectFree
   public static String removeWhitespaceBefore(String arg, String delimiter) {
     if (delimiter.isEmpty()) {
       throw new IllegalArgumentException("Bad delimiter: \"" + delimiter + "\"");
@@ -777,8 +755,7 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
-  public static String lpad(String s, @NonNegative int length) {
+  public static String lpad(String s, int length) {
     if (s.length() < length) {
       StringBuilder buf = new StringBuilder();
       for (int i = s.length(); i < length; i++) {
@@ -802,8 +779,7 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
-  public static String rpad(String s, @NonNegative int length) {
+  public static String rpad(String s, int length) {
     if (s.length() < length) {
       StringBuilder buf = new StringBuilder(s);
       for (int i = s.length(); i < length; i++) {
@@ -822,8 +798,7 @@ public final class StringsPlume {
    * @param length goal length
    * @return a string representation of num truncated or padded to length characters
    */
-  @SideEffectFree
-  public static String rpad(int num, @NonNegative int length) {
+  public static String rpad(int num, int length) {
     return rpad(String.valueOf(num), length);
   }
 
@@ -834,8 +809,7 @@ public final class StringsPlume {
    * @param length goal length
    * @return a string representation of num truncated or padded to length characters
    */
-  @SideEffectFree
-  public static String rpad(double num, @NonNegative int length) {
+  public static String rpad(double num, int length) {
     return rpad(String.valueOf(num), length);
   }
 
@@ -850,7 +824,7 @@ public final class StringsPlume {
    */
   @Deprecated // deprecated 2021-02-27
   public static class NullableStringComparator
-      implements Comparator<@Nullable String>, Serializable {
+      implements Comparator<String>, Serializable {
     /** Unique identifier for serialization. If you add or remove fields, change this number. */
     static final long serialVersionUID = 20150812L;
 
@@ -866,9 +840,8 @@ public final class StringsPlume {
      *     equal to, or greater than the second
      */
     @SuppressWarnings("ReferenceEquality") // comparator method uses ==
-    @Pure
     @Override
-    public int compare(@Nullable String s1, @Nullable String s2) {
+    public int compare(String s1, String s2) {
       if (s1 == s2) {
         return 0;
       }
@@ -893,7 +866,7 @@ public final class StringsPlume {
    * <p>This cannot be replaced by {@code Comparator.nullsFirst(Comparator.naturalOrder())} becase
    * {@code Object} is not {@code Comparable}.
    */
-  public static class ObjectComparator implements Comparator<@Nullable Object>, Serializable {
+  public static class ObjectComparator implements Comparator<Object>, Serializable {
 
     /** The canonical ObjectComparator. */
     public static final ObjectComparator it = new ObjectComparator();
@@ -923,9 +896,8 @@ public final class StringsPlume {
       "allcheckers:purity.not.deterministic.call",
       "lock"
     }) // toString is being used in a deterministic way
-    @Pure
     @Override
-    public int compare(@Nullable Object o1, @Nullable Object o2) {
+    public int compare(Object o1, Object o2) {
       // Make null compare smaller than anything else
       if (o1 == o2) {
         return 0;
@@ -967,7 +939,6 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
   public static ArrayList<Object> tokens(String str, String delim, boolean returnDelims) {
     return CollectionsPlume.makeArrayList(new StringTokenizer(str, delim, returnDelims));
   }
@@ -984,7 +955,6 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
   public static ArrayList<Object> tokens(String str, String delim) {
     return CollectionsPlume.makeArrayList(new StringTokenizer(str, delim));
   }
@@ -1000,7 +970,6 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
   public static ArrayList<Object> tokens(String str) {
     return CollectionsPlume.makeArrayList(new StringTokenizer(str));
   }
@@ -1016,8 +985,7 @@ public final class StringsPlume {
    * @param v a value; may be null
    * @return the value's toString and its class
    */
-  @SideEffectFree
-  public static String toStringAndClass(@Nullable Object v) {
+  public static String toStringAndClass(Object v) {
     return toStringAndClass(v, false);
   }
 
@@ -1028,8 +996,7 @@ public final class StringsPlume {
    * @param shallow if true, do not show elements of arrays and lists
    * @return the value's toString and its class
    */
-  @SideEffectFree
-  public static String toStringAndClass(@Nullable Object v, boolean shallow) {
+  public static String toStringAndClass(Object v, boolean shallow) {
     if (v == null) {
       return "null";
     }
@@ -1041,11 +1008,11 @@ public final class StringsPlume {
         return arrayToStringAndClass(v);
       }
       if (v instanceof List) {
-        return listToStringAndClass((List<? extends @PolyNull @Signed Object>) v);
+        return listToStringAndClass((List<? extends Object>) v);
       }
       if (v instanceof Map) {
         return mapToStringAndClass(
-            (Map<? extends @PolyNull @Signed Object, ? extends @PolyNull @Signed Object>) v);
+            (Map<? extends Object, ? extends Object>) v);
       }
     }
     try {
@@ -1062,9 +1029,8 @@ public final class StringsPlume {
    * @param lst a value; may be null
    * @return the value's toString and its class
    */
-  @SideEffectFree
   public static String listToStringAndClass(
-      @Nullable List<? extends @Signed @PolyNull Object> lst) {
+      List<? extends Object> lst) {
     if (lst == null) {
       return "null";
     } else {
@@ -1083,8 +1049,7 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
-  public static String listToString(@Nullable List<? extends @Signed @PolyNull Object> lst) {
+  public static String listToString(List<? extends Object> lst) {
     if (lst == null) {
       return "null";
     }
@@ -1104,8 +1069,7 @@ public final class StringsPlume {
    * @return a string representation of the array
    * @throws IllegalArgumentException if a is not an array
    */
-  @SideEffectFree
-  public static String arrayToStringAndClass(@Nullable Object a) {
+  public static String arrayToStringAndClass(Object a) {
 
     if (a == null) {
       return "null";
@@ -1156,11 +1120,10 @@ public final class StringsPlume {
     "allcheckers:purity.not.sideeffectfree.call", // side effect to local state
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @SideEffectFree
   public static String mapToStringAndClass(
-      Map<? extends @Signed @PolyNull Object, ? extends @Signed @PolyNull Object> m) {
+      Map<? extends Object, ? extends Object> m) {
     StringJoiner result = new StringJoiner(System.lineSeparator());
-    for (Map.Entry<? extends @Signed @PolyNull Object, ? extends @Signed @PolyNull Object> e :
+    for (Map.Entry<? extends Object, ? extends Object> e :
         m.entrySet()) {
       result.add("    " + toStringAndClass(e.getKey()) + " => " + toStringAndClass(e.getValue()));
     }
@@ -1181,7 +1144,6 @@ public final class StringsPlume {
    * @return noun, if n==1; otherwise, pluralization of noun
    * @throws IllegalArgumentException if the length of noun is 0
    */
-  @SideEffectFree
   public static String nplural(int n, String noun) {
     if (noun.isEmpty()) {
       throw new IllegalArgumentException(
@@ -1219,7 +1181,7 @@ public final class StringsPlume {
    * @return a conjunction or disjunction string
    */
   public static String conjunction(
-      String conjunction, List<? extends @Signed @PolyNull Object> elements) {
+      String conjunction, List<? extends Object> elements) {
     int size = elements.size();
     if (size == 0) {
       throw new IllegalArgumentException("no elements passed to conjunction()");
@@ -1244,8 +1206,6 @@ public final class StringsPlume {
    * @param ch character to search for
    * @return number of times the character appears in the string
    */
-  @Pure
-  @StaticallyExecutable
   public static int count(String s, int ch) {
     int result = 0;
     int pos = s.indexOf(ch);
@@ -1263,8 +1223,6 @@ public final class StringsPlume {
    * @param sub non-empty string to search for
    * @return number of times the substring appears in the string
    */
-  @Pure
-  @StaticallyExecutable
   public static int count(String s, String sub) {
     if (sub.equals("")) {
       throw new IllegalArgumentException("second argument must not be empty");
@@ -1286,7 +1244,6 @@ public final class StringsPlume {
    * @param val a numeric value
    * @return an abbreviated string representation of the value
    */
-  @SideEffectFree
   public static String abbreviateNumber(long val) {
 
     double dval = (double) val;
@@ -1320,7 +1277,7 @@ public final class StringsPlume {
   // From
   // https://stackoverflow.com/questions/37413816/get-number-of-placeholders-in-formatter-format-string
   /** Regex that matches a format specifier. Some correspond to arguments and some do not. */
-  private static @Regex(6) Pattern formatSpecifier =
+  private static Pattern formatSpecifier =
       Pattern.compile("%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])");
 
   /**
@@ -1336,8 +1293,6 @@ public final class StringsPlume {
     "allcheckers:purity.not.deterministic.call", // deterministic up to equals, which is sufficient
     "lock:method.guarantee.violated" // side effect to local state
   })
-  @Pure
-  @StaticallyExecutable
   public static int countFormatArguments(String s) {
     int result = 0;
     int maxIndex = 0;

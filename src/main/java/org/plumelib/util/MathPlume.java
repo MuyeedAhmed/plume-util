@@ -37,8 +37,6 @@ public final class MathPlume {
    * @param a value to negate
    * @return negative of a
    */
-  @Pure
-  @StaticallyExecutable
   public static int negate(int a) {
     return -a;
   }
@@ -49,8 +47,6 @@ public final class MathPlume {
    * @param a value to negate
    * @return negative of a
    */
-  @Pure
-  @StaticallyExecutable
   public static long negate(long a) {
     return -a;
   }
@@ -61,8 +57,6 @@ public final class MathPlume {
    * @param a value to negate
    * @return negative of a
    */
-  @Pure
-  @StaticallyExecutable
   public static double negate(double a) {
     return -a;
   }
@@ -73,8 +67,6 @@ public final class MathPlume {
    * @param a value to bitwise-complement
    * @return ~a, the bitwise complement of a
    */
-  @Pure
-  @StaticallyExecutable
   public static int bitwiseComplement(int a) {
     return ~a;
   }
@@ -85,8 +77,6 @@ public final class MathPlume {
    * @param a value to bitwise-complement
    * @return ~a, the bitwise complement of a
    */
-  @Pure
-  @StaticallyExecutable
   public static long bitwiseComplement(long a) {
     return ~a;
   }
@@ -98,8 +88,6 @@ public final class MathPlume {
    * @param y second multiplicand
    * @return x * y
    */
-  @Pure
-  @StaticallyExecutable
   public static int mul(int x, int y) {
     return x * y;
   }
@@ -111,8 +99,6 @@ public final class MathPlume {
    * @param y second multiplicand
    * @return x * y
    */
-  @Pure
-  @StaticallyExecutable
   public static long mul(long x, long y) {
     return x * y;
   }
@@ -124,8 +110,6 @@ public final class MathPlume {
    * @param y second multiplicand
    * @return x * y
    */
-  @Pure
-  @StaticallyExecutable
   public static double mul(double x, double y) {
     return x * y;
   }
@@ -137,8 +121,6 @@ public final class MathPlume {
    * @param y divisor
    * @return x / y
    */
-  @Pure
-  @StaticallyExecutable
   public static int div(int x, int y) {
     return x / y;
   }
@@ -150,8 +132,6 @@ public final class MathPlume {
    * @param y divisor
    * @return x / y
    */
-  @Pure
-  @StaticallyExecutable
   public static long div(long x, long y) {
     return x / y;
   }
@@ -163,8 +143,6 @@ public final class MathPlume {
    * @param y divisor
    * @return x / y
    */
-  @Pure
-  @StaticallyExecutable
   public static double div(double x, double y) {
     return x / y;
   }
@@ -176,8 +154,6 @@ public final class MathPlume {
    * @param y modulus
    * @return x % y
    */
-  @Pure
-  @StaticallyExecutable
   public static int mod(int x, int y) {
     return x % y;
   }
@@ -189,8 +165,6 @@ public final class MathPlume {
    * @param y modulus
    * @return x % y
    */
-  @Pure
-  @StaticallyExecutable
   public static long mod(long x, long y) {
     return x % y;
   }
@@ -202,8 +176,6 @@ public final class MathPlume {
    * @param y magnitude of the left-shift
    * @return x &lt;&lt; y
    */
-  @Pure
-  @StaticallyExecutable
   public static int lshift(int x, int y) {
     return x << y;
   }
@@ -215,8 +187,6 @@ public final class MathPlume {
    * @param y magnitude of the left-shift
    * @return x &lt;&lt; y
    */
-  @Pure
-  @StaticallyExecutable
   public static long lshift(long x, long y) {
     return x << y;
   }
@@ -228,8 +198,6 @@ public final class MathPlume {
    * @param y magnitude of the right-shift
    * @return x &gt;&gt; y
    */
-  @Pure
-  @StaticallyExecutable
   public static int rshiftSigned(int x, int y) {
     return x >> y;
   }
@@ -241,8 +209,6 @@ public final class MathPlume {
    * @param y magnitude of the right-shift
    * @return x &gt;&gt; y
    */
-  @Pure
-  @StaticallyExecutable
   public static long rshiftSigned(long x, long y) {
     return x >> y;
   }
@@ -254,9 +220,7 @@ public final class MathPlume {
    * @param y magnitude of the right-shift
    * @return x &gt;&gt;&gt; y
    */
-  @Pure
-  @StaticallyExecutable
-  public static @Unsigned int rshiftUnsigned(@Unsigned int x, int y) {
+  public static int rshiftUnsigned(int x, int y) {
     return x >>> y;
   }
 
@@ -267,9 +231,7 @@ public final class MathPlume {
    * @param y magnitude of the right-shift
    * @return x &gt;&gt;&gt; y
    */
-  @Pure
-  @StaticallyExecutable
-  public static @Unsigned long rshiftUnsigned(@Unsigned long x, long y) {
+  public static long rshiftUnsigned(long x, long y) {
     return x >>> y;
   }
 
@@ -280,8 +242,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x &amp; y
    */
-  @Pure
-  @StaticallyExecutable
   public static int bitwiseAnd(int x, int y) {
     return x & y;
   }
@@ -293,8 +253,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x &amp; y
    */
-  @Pure
-  @StaticallyExecutable
   public static long bitwiseAnd(long x, long y) {
     return x & y;
   }
@@ -306,8 +264,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical and of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static int logicalAnd(int x, int y) {
     return ((x != 0) && (y != 0)) ? 1 : 0;
   }
@@ -319,8 +275,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical and of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static long logicalAnd(long x, long y) {
     return ((x != 0) && (y != 0)) ? 1 : 0;
   }
@@ -332,8 +286,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x ^ y
    */
-  @Pure
-  @StaticallyExecutable
   public static int bitwiseXor(int x, int y) {
     return x ^ y;
   }
@@ -345,8 +297,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x ^ y
    */
-  @Pure
-  @StaticallyExecutable
   public static long bitwiseXor(long x, long y) {
     return x ^ y;
   }
@@ -358,8 +308,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical xor of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static int logicalXor(int x, int y) {
     return ((x != 0) ^ (y != 0)) ? 1 : 0;
   }
@@ -371,8 +319,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical xor of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static long logicalXor(long x, long y) {
     return ((x != 0) ^ (y != 0)) ? 1 : 0;
   }
@@ -384,8 +330,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x | y
    */
-  @Pure
-  @StaticallyExecutable
   public static int bitwiseOr(int x, int y) {
     return x | y;
   }
@@ -397,8 +341,6 @@ public final class MathPlume {
    * @param y second operand
    * @return x | y
    */
-  @Pure
-  @StaticallyExecutable
   public static long bitwiseOr(long x, long y) {
     return x | y;
   }
@@ -410,8 +352,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical or of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static int logicalOr(int x, int y) {
     return ((x != 0) || (y != 0)) ? 1 : 0;
   }
@@ -423,8 +363,6 @@ public final class MathPlume {
    * @param y second operand
    * @return the logical or of x and y; the result is always 0 or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static long logicalOr(long x, long y) {
     return ((x != 0) || (y != 0)) ? 1 : 0;
   }
@@ -439,8 +377,6 @@ public final class MathPlume {
    * @param a value to have its sign taken
    * @return the sign of a: -1, 0, or 1
    */
-  @Pure
-  @StaticallyExecutable
   public static int sign(int a) {
     if (a == 0) {
       return 0;
@@ -464,8 +400,6 @@ public final class MathPlume {
    * @return base to the expt power
    * @see Math#pow(double, double)
    */
-  @Pure
-  @StaticallyExecutable
   public static int pow(int base, int expt) throws ArithmeticException {
     return powFast(base, expt);
   }
@@ -478,8 +412,6 @@ public final class MathPlume {
    * @return base to the expt power
    * @see Math#pow(double, double)
    */
-  @Pure
-  @StaticallyExecutable
   public static long pow(long base, long expt) throws ArithmeticException {
     return powFast(base, expt);
   }
@@ -493,8 +425,6 @@ public final class MathPlume {
    * @return base to the expt power
    * @see Math#pow(double, double)
    */
-  @Pure
-  @StaticallyExecutable
   private static int powFast(int base, int expt) throws ArithmeticException {
     if (expt < 0) {
       throw new ArithmeticException("Negative exponent passed to pow");
@@ -520,8 +450,6 @@ public final class MathPlume {
    * @return base to the expt power
    * @see Math#pow(double, double)
    */
-  @Pure
-  @StaticallyExecutable
   private static long powFast(long base, long expt) throws ArithmeticException {
     if (expt < 0) {
       throw new ArithmeticException("Negative exponent passed to pow");
@@ -573,8 +501,6 @@ public final class MathPlume {
    * @param b second operand
    * @return greatest common divisor of a and b
    */
-  @Pure
-  @StaticallyExecutable
   public static int gcd(int a, int b) {
 
     // Euclid's method
@@ -597,8 +523,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static int gcd(int[] a) {
     if (a.length == 0) {
       return 0;
@@ -620,8 +544,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the differences between the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static int gcdDifferences(int[] a) {
     if (a.length < 2) {
       return 0;
@@ -645,8 +567,6 @@ public final class MathPlume {
    * @param b second operand
    * @return greatest common divisor of a and b
    */
-  @Pure
-  @StaticallyExecutable
   public static long gcd(long a, long b) {
 
     // Euclid's method
@@ -669,8 +589,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static long gcd(long[] a) {
     if (a.length == 0) {
       return 0;
@@ -692,8 +610,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the differences between the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static long gcdDifferences(long[] a) {
     if (a.length < 2) {
       return 0;
@@ -715,8 +631,6 @@ public final class MathPlume {
    * @param b second operand
    * @return greatest common divisor of a and b
    */
-  @Pure
-  @StaticallyExecutable
   public static double gcd(double a, double b) {
 
     if (a == Double.POSITIVE_INFINITY
@@ -748,8 +662,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static double gcd(double[] a) {
     if (a.length == 0) {
       return 0;
@@ -771,8 +683,6 @@ public final class MathPlume {
    * @param a array of operands
    * @return greatest common divisor of the differences between the elements of a
    */
-  @Pure
-  @StaticallyExecutable
   public static double gcdDifferences(double[] a) {
     if (a.length < 2) {
       return 0;
@@ -801,10 +711,8 @@ public final class MathPlume {
    * @deprecated use {@link #modNonnegative(int, int)}
    */
   @Deprecated // use modNonnegative(); deprecated 2020-02-20
-  @Pure
-  @StaticallyExecutable
-  public static @NonNegative @LessThan("#2") @PolyUpperBound int modPositive(
-      int x, @PolyUpperBound int y) {
+  public static int modPositive(
+      int x, int y) {
     return modNonnegative(x, y);
   }
 
@@ -821,10 +729,8 @@ public final class MathPlume {
     "index:return"
   }) // result is non-negative because either y is positive (-> x % y is non-negative)
   // or |y| is added to x % y, which is also non-negative
-  @Pure
-  @StaticallyExecutable
-  public static @NonNegative @LessThan("#2") @PolyUpperBound int modNonnegative(
-      int x, @PolyUpperBound int y) {
+  public static int modNonnegative(
+      int x, int y) {
     int result = x % y;
     if (result < 0) {
       result += Math.abs(y);
@@ -843,9 +749,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    */
   @SuppressWarnings("value:statically.executable.not.pure") // results are .equals() but not ==
-  @SideEffectFree
-  @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] modulus(int[] nums) {
+  public static int[] modulus(int[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -873,7 +777,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(int[])
    */
-  public static int @Nullable @ArrayLen(2) [] modulusInt(Iterator<Integer> itor) {
+  public static int[] modulusInt(Iterator<Integer> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -923,9 +827,7 @@ public final class MathPlume {
    *     null if no such exists or the array contains fewer than 3 elements
    */
   @SuppressWarnings("value:statically.executable.not.pure") // results are .equals() but not ==
-  @SideEffectFree
-  @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] modulusStrict(int[] nums, boolean nonstrictEnds) {
+  public static int[] modulusStrict(int[] nums, boolean nonstrictEnds) {
     if (nums.length < 3) {
       return null;
     }
@@ -978,7 +880,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static int @Nullable @ArrayLen(2) [] modulusStrictInt(
+  public static int[] modulusStrictInt(
       Iterator<Integer> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1040,10 +942,8 @@ public final class MathPlume {
    * @deprecated use {@link #modNonnegative(long, long)}
    */
   @Deprecated // use modNonnegative(); deprecated 2020-02-20
-  @Pure
-  @StaticallyExecutable
-  public static @NonNegative @LessThan("#2") @PolyUpperBound long modPositive(
-      long x, @PolyUpperBound long y) {
+  public static long modPositive(
+      long x, long y) {
     return modNonnegative(x, y);
   }
 
@@ -1060,10 +960,8 @@ public final class MathPlume {
     "index:return"
   }) // result is non-negative because either y is positive (-> x % y is non-negative) or
   // |y| is added to x % y, which is also non-negative
-  @Pure
-  @StaticallyExecutable
-  public static @NonNegative @LessThan("#2") @PolyUpperBound long modNonnegative(
-      long x, @PolyUpperBound long y) {
+  public static long modNonnegative(
+      long x, long y) {
     long result = x % y;
     if (result < 0) {
       result += Math.abs(y);
@@ -1082,9 +980,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    */
   @SuppressWarnings("value:statically.executable.not.pure") // results are .equals() but not ==
-  @SideEffectFree
-  @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] modulus(long[] nums) {
+  public static long[] modulus(long[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -1112,7 +1008,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(long[])
    */
-  public static long @Nullable @ArrayLen(2) [] modulusLong(Iterator<Long> itor) {
+  public static long[] modulusLong(Iterator<Long> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -1162,9 +1058,7 @@ public final class MathPlume {
    *     null if no such exists or the array contains fewer than 3 elements
    */
   @SuppressWarnings("value:statically.executable.not.pure") // results are .equals() but not ==
-  @SideEffectFree
-  @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] modulusStrict(long[] nums, boolean nonstrictEnds) {
+  public static long[] modulusStrict(long[] nums, boolean nonstrictEnds) {
     if (nums.length < 3) {
       return null;
     }
@@ -1217,7 +1111,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static long @Nullable @ArrayLen(2) [] modulusStrictLong(
+  public static long[] modulusStrictLong(
       Iterator<Long> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1280,9 +1174,7 @@ public final class MathPlume {
    * @return the set: [min(nums)..max(nums)] - nums
    */
   @SuppressWarnings({"allcheckers:purity", "lock"})
-  @Pure
-  @StaticallyExecutable
-  public static int[] missingNumbers(int @MinLen(1) [] nums) {
+  public static int[] missingNumbers(int[] nums) {
     // avoid modifying parameter
     nums = nums.clone();
     Arrays.sort(nums);
@@ -1317,15 +1209,15 @@ public final class MathPlume {
   static final class MissingNumbersIteratorInt implements Iterator<Integer> {
     // Exactly one of nums and numsItor is non-null.
     /** The numbers not to include in the iterator. */
-    int @MonotonicNonNull @MinLen(1) [] nums;
+    int[] nums;
     /** The numbers not to include in the iterator. */
-    @MonotonicNonNull Iterator<Integer> numsItor;
+    Iterator<Integer> numsItor;
     /** The current element of the numbers not to include in the iterator. */
     int currentNonmissing;
     /** The next element to be returned by the iterator. */
     int currentMissing;
     /** Used only if nums != null, in which case it is an index into nums. */
-    @IndexFor("nums") int currentIndex;
+    int currentIndex;
     /**
      * If true, include the value just before the minimum excluded element and the value just after
      * the maximum excluded element.
@@ -1338,7 +1230,7 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param addEnds if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorInt(int @MinLen(1) [] nums, boolean addEnds) {
+    MissingNumbersIteratorInt(int[] nums, boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
         int[] numsCopy = new int[nums.length];
@@ -1375,7 +1267,7 @@ public final class MathPlume {
       }
       this.numsItor = numsItor;
       @SuppressWarnings("lowerbound:assignment") // unused variable, so value doesn't matter
-      @IndexFor("nums") int unused = Integer.MIN_VALUE;
+      int unused = Integer.MIN_VALUE;
       currentIndex = unused;
     }
 
@@ -1384,7 +1276,7 @@ public final class MathPlume {
       "lock:method.guarantee.violated"
     })
     @Override
-    public boolean hasNext(@GuardSatisfied MissingNumbersIteratorInt this) {
+    public boolean hasNext(MissingNumbersIteratorInt this) {
       if (currentMissing < currentNonmissing) {
         return true;
       }
@@ -1395,7 +1287,7 @@ public final class MathPlume {
               "index:assignment" // This breaks the invariant, but it's checked right below and the
           // function exits.
           )
-          @IndexFor("nums") int currentIndex_temp = currentIndex + 1;
+          int currentIndex_temp = currentIndex + 1;
           currentIndex = currentIndex_temp;
           if (currentIndex >= nums.length) {
             if (addEnds) {
@@ -1439,7 +1331,7 @@ public final class MathPlume {
     }
 
     @Override
-    public Integer next(@GuardSatisfied MissingNumbersIteratorInt this) {
+    public Integer next(MissingNumbersIteratorInt this) {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
@@ -1449,7 +1341,7 @@ public final class MathPlume {
     }
 
     @Override
-    public void remove(@GuardSatisfied MissingNumbersIteratorInt this) {
+    public void remove(MissingNumbersIteratorInt this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -1462,9 +1354,7 @@ public final class MathPlume {
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
   @SuppressWarnings({"allcheckers:purity", "lock"})
-  @Pure
-  @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrict(int[] nums) {
+  public static int[] nonmodulusStrict(int[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1485,7 +1375,7 @@ public final class MathPlume {
    * @return value to be returned by {@link #nonmodulusStrict(int[])}: a tuple of (r,m) where all
    *     numbers in {@code missing} are equal to r (mod m)
    */
-  private static int @Nullable @ArrayLen(2) [] nonmodulusStrictIntInternal(
+  private static int[] nonmodulusStrictIntInternal(
       Iterator<Integer> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulusStrict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
@@ -1512,7 +1402,7 @@ public final class MathPlume {
    * @return true if the first and last elements are not equal to r (mod m)
    */
   private static boolean checkFirstAndLastNonmodulus(
-      int @ArrayLen(2) [] rm, CollectionsPlume.RemoveFirstAndLastIterator<Integer> rfali) {
+      int[] rm, CollectionsPlume.RemoveFirstAndLastIterator<Integer> rfali) {
     int r = rm[0];
     int m = rm[1];
     int first = rfali.getFirst().intValue();
@@ -1527,7 +1417,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrictInt(Iterator<Integer> nums) {
+  public static int[] nonmodulusStrictInt(Iterator<Integer> nums) {
     return nonmodulusStrictIntInternal(new MissingNumbersIteratorInt(nums, true));
   }
 
@@ -1562,9 +1452,7 @@ public final class MathPlume {
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulusStrict instead.
   @SuppressWarnings("allcheckers:purity")
-  @Pure
-  @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] nonmodulusNonstrict(int[] nums) {
+  public static int[] nonmodulusNonstrict(int[] nums) {
     if (nums.length < 4) {
       return null;
     }
@@ -1580,7 +1468,7 @@ public final class MathPlume {
       boolean[] hasModulus = new boolean[m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
-        @IndexFor("hasModulus") int rem = modPositive(nums[i], m);
+        int rem = modPositive(nums[i], m);
         if (!hasModulus[rem]) {
           hasModulus[rem] = true;
           numNonmodulus--;
@@ -1612,9 +1500,7 @@ public final class MathPlume {
    * @return the set: [min(nums)..max(nums)] - nums
    */
   @SuppressWarnings({"allcheckers:purity", "lock"})
-  @Pure
-  @StaticallyExecutable
-  public static long[] missingNumbers(long @MinLen(1) [] nums) {
+  public static long[] missingNumbers(long[] nums) {
     // avoid modifying parameter
     nums = nums.clone();
     Arrays.sort(nums);
@@ -1650,15 +1536,15 @@ public final class MathPlume {
   static final class MissingNumbersIteratorLong implements Iterator<Long> {
     // Exactly one of nums and numsItor is non-null.
     /** The numbers not to include in the iterator. */
-    long @MonotonicNonNull @MinLen(1) [] nums;
+    long[] nums;
     /** The numbers not to include in the iterator. */
-    @MonotonicNonNull Iterator<Long> numsItor;
+    Iterator<Long> numsItor;
     /** The current element of the numbers not to include in the iterator. */
     long currentNonmissing;
     /** The next element to be returned by the iterator. */
     long currentMissing;
     /** Used only if nums != null, in which case it is an index into nums. */
-    @IndexFor("nums") int currentIndex;
+    int currentIndex;
     /**
      * If true, include the value just before the minimum excluded element and the value just after
      * the maximum excluded element.
@@ -1672,7 +1558,7 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param addEnds if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorLong(long @MinLen(1) [] nums, boolean addEnds) {
+    MissingNumbersIteratorLong(long[] nums, boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
         long[] numsCopy = new long[nums.length];
@@ -1709,7 +1595,7 @@ public final class MathPlume {
       }
       this.numsItor = numsItor;
       @SuppressWarnings("lowerbound:assignment") // unused variable, so value doesn't matter
-      @IndexFor("nums") int unused = Integer.MIN_VALUE;
+      int unused = Integer.MIN_VALUE;
       currentIndex = unused;
     }
 
@@ -1718,7 +1604,7 @@ public final class MathPlume {
       "lock:method.guarantee.violated"
     })
     @Override
-    public boolean hasNext(@GuardSatisfied MissingNumbersIteratorLong this) {
+    public boolean hasNext(MissingNumbersIteratorLong this) {
       if (currentMissing < currentNonmissing) {
         return true;
       }
@@ -1729,7 +1615,7 @@ public final class MathPlume {
               "index:assignment" // This breaks the invariant, but it's checked right below and the
           // function exits.
           )
-          @IndexFor("nums") int currentIndex_temp = currentIndex + 1;
+          int currentIndex_temp = currentIndex + 1;
           currentIndex = currentIndex_temp;
           if (currentIndex >= nums.length) {
             if (addEnds) {
@@ -1773,7 +1659,7 @@ public final class MathPlume {
     }
 
     @Override
-    public Long next(@GuardSatisfied MissingNumbersIteratorLong this) {
+    public Long next(MissingNumbersIteratorLong this) {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
@@ -1783,7 +1669,7 @@ public final class MathPlume {
     }
 
     @Override
-    public void remove(@GuardSatisfied MissingNumbersIteratorLong this) {
+    public void remove(MissingNumbersIteratorLong this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -1796,9 +1682,7 @@ public final class MathPlume {
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
   @SuppressWarnings({"allcheckers:purity", "lock"})
-  @Pure
-  @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] nonmodulusStrict(long[] nums) {
+  public static long[] nonmodulusStrict(long[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1818,7 +1702,7 @@ public final class MathPlume {
    * @param missing the missing integers; modified by this method
    * @return value to be returned by {@link #nonmodulusStrict(long[])}
    */
-  private static long @Nullable @ArrayLen(2) [] nonmodulusStrictLongInternal(
+  private static long[] nonmodulusStrictLongInternal(
       Iterator<Long> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulusStrict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
@@ -1844,9 +1728,8 @@ public final class MathPlume {
    *     iterator has already been iterated all the way to its end.
    * @return true if the first and last elements are equal to r (mod m)
    */
-  @Pure
   private static boolean checkFirstAndLastNonmodulus(
-      long @ArrayLen(2) [] rm, CollectionsPlume.RemoveFirstAndLastIterator<Long> rfali) {
+      long[] rm, CollectionsPlume.RemoveFirstAndLastIterator<Long> rfali) {
     long r = rm[0];
     long m = rm[1];
     long first = rfali.getFirst().longValue();
@@ -1861,7 +1744,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static long @Nullable @ArrayLen(2) [] nonmodulusStrictLong(Iterator<Long> nums) {
+  public static long[] nonmodulusStrictLong(Iterator<Long> nums) {
     return nonmodulusStrictLongInternal(new MissingNumbersIteratorLong(nums, true));
   }
 
@@ -1896,9 +1779,7 @@ public final class MathPlume {
   // This seems to give too many false positives (or maybe my probability
   // model was wrong); use nonmodulusStrict instead.
   @SuppressWarnings("allcheckers:purity")
-  @Pure
-  @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] nonmodulusNonstrict(long[] nums) {
+  public static long[] nonmodulusNonstrict(long[] nums) {
     if (nums.length < 4) {
       return null;
     }
@@ -1914,7 +1795,7 @@ public final class MathPlume {
       boolean[] hasModulus = new boolean[m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
-        @IndexFor("hasModulus") int rem = (int) modPositive(nums[i], m);
+        int rem = (int) modPositive(nums[i], m);
         if (!hasModulus[rem]) {
           hasModulus[rem] = true;
           numNonmodulus--;

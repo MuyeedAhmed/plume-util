@@ -35,7 +35,7 @@ public class DeterministicObject {
    * the second one has 1, and so forth.
    */
   @Override
-  public int hashCode(@GuardSatisfied DeterministicObject this) {
+  public int hashCode(DeterministicObject this) {
     return uid;
   }
 }

@@ -25,7 +25,6 @@ public final class FilesPlumeTest {
 
   // public Object incrementHashMap(HashMap hm, Object key, int count)
 
-  @Test
   public void test_canCreateAndWrite() {
 
     try {

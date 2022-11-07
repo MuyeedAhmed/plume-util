@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public final class UtilPlumeTest {
 
-  private static BitSet randomBitSet(@NonNegative int length, Random r) {
+  private static BitSet randomBitSet(int length, Random r) {
     BitSet result = new BitSet(length);
     for (int i = 0; i < length; i++) {
       result.set(i, r.nextBoolean());
@@ -17,7 +17,6 @@ public final class UtilPlumeTest {
     return result;
   }
 
-  @Test
   public void test_intersectionCardinalityAtLeast() {
 
     // public static intersectionCardinalityAtLeast(BitSet a, BitSet b, int i)

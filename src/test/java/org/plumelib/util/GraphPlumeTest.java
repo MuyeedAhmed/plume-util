@@ -52,7 +52,6 @@ public final class GraphPlumeTest {
     preds1.get(4).add(6);
   }
 
-  @Test
   public void testGraphPlume() {
 
     initializePreds1AndSucc1();

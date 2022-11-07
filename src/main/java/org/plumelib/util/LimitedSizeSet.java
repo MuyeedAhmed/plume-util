@@ -24,7 +24,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  *
  * @param <T> the type of elements in the set
  */
-public class LimitedSizeSet<T extends @Nullable Object> implements Serializable, Cloneable {
+public class LimitedSizeSet<T extends Object> implements Serializable, Cloneable {
   /** Unique identifier for serialization. If you add or remove fields, change this number. */
   static final long serialVersionUID = 20031021L;
 
@@ -34,11 +34,11 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    * #numValues} equals the {@code maxValues} argument to the constructor).
    */
   @SuppressWarnings("serial") // don't serialize this if element type is not serializable
-  protected @Nullable T @Nullable @MinLen(1) [] values;
+  protected T[] values;
   /** The number of active elements (equivalently, the first unused index). */
   // The Index Checker annotation is not @IndexOrHigh("values"), because the invariant is broken
   // when the values field is set to null. Warnings are suppressed when breaking the invariant.
-  protected @IndexOrHigh("values") int numValues;
+  protected int numValues;
 
   /** Whether assertions are enabled. */
   private static boolean assertsEnabled = false;
@@ -53,7 +53,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  public LimitedSizeSet(@Positive int maxValues) {
+  public LimitedSizeSet(int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
@@ -62,7 +62,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
       "unchecked",
       "value" // https://github.com/kelloggm/checker-framework/issues/174
     })
-    @Nullable T @MinLen(1) [] newValuesArray = (@Nullable T[]) new @Nullable Object[maxValues];
+    T @MinLen(1) [] newValuesArray = (T[]) new Object[maxValues];
     values = newValuesArray;
     numValues = 0;
   }
@@ -116,7 +116,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
     }
     // TODO: s.values isn't modified by the call to add.  Use a local variable until
     // https://tinyurl.com/cfissue/984 is fixed.
-    @Nullable T @SameLen("s.values") [] svalues = s.values;
+    T[] svalues = s.values;
     for (int i = 0; i < s.size(); i++) {
       // This implies that the set cannot hold null.
       assert svalues[i] != null : "@AssumeAssertion(nullness): used portion of array";
@@ -133,7 +133,6 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    * @param elt the element whose membership to test
    * @return true if this set contains {@code elt}
    */
-  @Pure
   public boolean contains(T elt) {
     if (repNulled()) {
       throw new UnsupportedOperationException();
@@ -152,8 +151,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    *
    * @return a number that is a lower bound on the number of elements added to the set
    */
-  @Pure
-  public @IndexOrHigh("this.values") int size(@GuardSatisfied LimitedSizeSet<T> this) {
+  public int size(LimitedSizeSet<T> this) {
     return numValues;
   }
 
@@ -165,7 +163,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    */
   @SuppressWarnings(
       "lowerbound") // https://tinyurl.com/cfissue/1606: nulling the rep leaves numValues positive
-  public @Positive int maxSize() {
+  public int maxSize() {
     if (repNulled()) {
       return numValues;
     } else {
@@ -179,9 +177,7 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    *
    * @return true if this set has been filled to capacity and its internal representation is nulled
    */
-  @EnsuresNonNullIf(result = false, expression = "values")
-  @Pure
-  public boolean repNulled(@GuardSatisfied LimitedSizeSet<T> this) {
+  public boolean repNulled(LimitedSizeSet<T> this) {
     return values == null;
   }
 
@@ -201,9 +197,8 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
 
   @SuppressWarnings(
       "allcheckers:purity.not.sideeffectfree.assign.field") // side effect to local state (clone)
-  @SideEffectFree
   @Override
-  public LimitedSizeSet<T> clone(@GuardSatisfied LimitedSizeSet<T> this) {
+  public LimitedSizeSet<T> clone(LimitedSizeSet<T> this) {
     LimitedSizeSet<T> result;
     try {
       @SuppressWarnings("unchecked")
@@ -227,8 +222,8 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
    * @param slist a list of LimitedSizeSet, whose elements will be merged
    * @return a LimitedSizeSet that merges the elements of slist
    */
-  public static <T extends @Nullable Object> LimitedSizeSet<T> merge(
-      @Positive int maxValues, List<LimitedSizeSet<? extends T>> slist) {
+  public static <T extends Object> LimitedSizeSet<T> merge(
+      int maxValues, List<LimitedSizeSet<? extends T>> slist) {
     LimitedSizeSet<T> result = new LimitedSizeSet<>(maxValues);
     for (LimitedSizeSet<? extends T> s : slist) {
       result.addAll(s);
@@ -236,9 +231,8 @@ public class LimitedSizeSet<T extends @Nullable Object> implements Serializable,
     return result;
   }
 
-  @SideEffectFree
   @Override
-  public String toString(@GuardSatisfied LimitedSizeSet<T> this) {
+  public String toString(LimitedSizeSet<T> this) {
     return ("[size=" + size() + "; " + (repNulled() ? "null" : ArraysPlume.toString(values)) + "]");
   }
 }

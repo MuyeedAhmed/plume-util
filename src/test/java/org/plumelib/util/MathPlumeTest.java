@@ -18,7 +18,7 @@ public final class MathPlumeTest {
   /// Utility functions
   ///
 
-  private static void assertArraysEquals(int @Nullable [] a1, int @Nullable [] a2) {
+  private static void assertArraysEquals(int[] a1, int[] a2) {
     boolean result = Arrays.equals(a1, a2);
     if (!result) {
       System.out.println("Arrays differ: " + Arrays.toString(a1) + ", " + Arrays.toString(a2));
@@ -58,7 +58,6 @@ public final class MathPlumeTest {
   }
 
   // Test the utility functions
-  @Test
   public void testTestUtilPlume() {
     int[] a = new int[] {3, 4, 5};
     assertArraysEquals(intIteratorArray(intArrayIterator(a)), a);
@@ -68,7 +67,6 @@ public final class MathPlumeTest {
   /// The tests themselves
   ///
 
-  @Test
   public void test_negate() {
 
     // int negate(int a)
@@ -77,7 +75,6 @@ public final class MathPlumeTest {
     assertTrue(MathPlume.negate(0) == 0);
   }
 
-  @Test
   public void test_bitwiseComplement() {
 
     // int bitwiseComplement(int a)
@@ -86,7 +83,6 @@ public final class MathPlumeTest {
     assertTrue(MathPlume.bitwiseComplement(0) == -1);
   }
 
-  @Test
   public void test_sign() {
 
     // int sign(int a)
@@ -95,7 +91,6 @@ public final class MathPlumeTest {
     assertTrue(MathPlume.sign(0) == 0);
   }
 
-  @Test
   public void test_pow() {
 
     // int pow(int base, int expt)
@@ -119,7 +114,6 @@ public final class MathPlumeTest {
     }
   }
 
-  @Test
   public void test_gcd() {
 
     // int gcd(int a, int b)
@@ -169,7 +163,6 @@ public final class MathPlumeTest {
   }
 
   @SuppressWarnings("deprecation")
-  @Test
   public void test_mod() {
 
     // int modPositive(int x, int y)
@@ -189,7 +182,6 @@ public final class MathPlumeTest {
     }
   }
 
-  @Test
   public void test_missingNumbers() {
 
     // int[] missingNumbers(int[] nums)
@@ -221,7 +213,7 @@ public final class MathPlumeTest {
   }
 
   static class TestModulus {
-    void check(int[] nums, int @Nullable [] goalRm) {
+    void check(int[] nums, int[] goalRm) {
       int[] rm = MathPlume.modulus(nums);
       if (!Arrays.equals(rm, goalRm)) {
         throw new Error(
@@ -243,30 +235,30 @@ public final class MathPlumeTest {
       }
     }
 
-    void check(Iterator<Integer> itor, int @Nullable [] goalRm) {
+    void check(Iterator<Integer> itor, int[] goalRm) {
       // There would be no point to this:  it's testing
       // intIteratorArray, not the iterator version!
       // return check(intIteratorArray(itor), goalRm);
       assertArraysEquals(MathPlume.modulusInt(itor), goalRm);
     }
 
-    void checkIterator(int[] nums, int @Nullable [] goalRm) {
+    void checkIterator(int[] nums, int[] goalRm) {
       check(intArrayIterator(nums), goalRm);
     }
   }
 
   static class TestNonModulus {
-    void checkStrict(int[] nums, int @Nullable [] goalRm) {
+    void checkStrict(int[] nums, int[] goalRm) {
       check(nums, goalRm, true);
       Iterator<Integer> itor = intArrayIterator(nums);
       assertArraysEquals(MathPlume.nonmodulusStrictInt(itor), goalRm);
     }
 
-    void checkNonstrict(int[] nums, int @Nullable [] goalRm) {
+    void checkNonstrict(int[] nums, int[] goalRm) {
       check(nums, goalRm, false);
     }
 
-    void check(int[] nums, int @Nullable [] goalRm, boolean strict) {
+    void check(int[] nums, int[] goalRm, boolean strict) {
       int[] rm;
       if (strict) {
         rm = MathPlume.nonmodulusStrict(nums);
@@ -294,7 +286,6 @@ public final class MathPlumeTest {
     }
   }
 
-  @Test
   public void test_modulus() {
 
     // int[] modulus(int[] nums)

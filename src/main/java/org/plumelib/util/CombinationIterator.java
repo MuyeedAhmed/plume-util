@@ -35,9 +35,9 @@ public class CombinationIterator<T> implements Iterator<List<T>> {
   /** Iterators for each list of candidate values. */
   private final Iterator<T>[] iterators;
   /** The size of each returned result; the length of listsOfCandidates. */
-  private final @LengthOf({"listsOfCandidates", "iterators"}) int combinationSize;
+  private final int combinationSize;
   /** The next value to return, or null if to more values. */
-  private @Nullable List<T> nextValue;
+  private List<T> nextValue;
 
   /**
    * Creates a {@link CombinationIterator} for lists constructed from the given candidates. Each
@@ -74,14 +74,12 @@ public class CombinationIterator<T> implements Iterator<List<T>> {
   }
 
   @Override
-  @EnsuresNonNullIf(expression = "nextValue", result = true)
-  public boolean hasNext(@GuardSatisfied CombinationIterator<T> this) {
+  public boolean hasNext(CombinationIterator<T> this) {
     return nextValue != null;
   }
 
   /** Advance {@code nextValue} to the next value, or to null if there are no more values. */
-  @RequiresNonNull("nextValue")
-  private void advanceNext(@GuardSatisfied CombinationIterator<T> this) {
+  private void advanceNext(CombinationIterator<T> this) {
     for (int i = combinationSize - 1; i >= 0; i--) {
       if (iterators[i].hasNext()) {
         nextValue.set(i, iterators[i].next());
@@ -95,7 +93,7 @@ public class CombinationIterator<T> implements Iterator<List<T>> {
   }
 
   @Override
-  public List<T> next(@GuardSatisfied CombinationIterator<T> this) {
+  public List<T> next(CombinationIterator<T> this) {
     if (!hasNext()) {
       throw new NoSuchElementException();
     }
@@ -106,7 +104,7 @@ public class CombinationIterator<T> implements Iterator<List<T>> {
   }
 
   @Override
-  public void remove(@GuardSatisfied CombinationIterator<T> this) {
+  public void remove(CombinationIterator<T> this) {
     throw new UnsupportedOperationException(
         "Remove not implemented for randoop.reflection.SubstitutionEnumerator");
   }

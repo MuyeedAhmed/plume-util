@@ -77,8 +77,7 @@ public final class FileWriterWithName extends FileWriter {
    */
   @SuppressWarnings(
       "lock:lock.not.held") // Lock Checker bug? fileName is final, no lock is needed to access it
-  @Pure
-  public String getFileName(@GuardedByUnknown FileWriterWithName this) {
+  public String getFileName(FileWriterWithName this) {
     return fileName;
   }
 
@@ -87,9 +86,8 @@ public final class FileWriterWithName extends FileWriter {
    *
    * @return the name of the file being written by this
    */
-  @Pure
   @Override
-  public String toString(@GuardedByUnknown FileWriterWithName this) {
+  public String toString(FileWriterWithName this) {
     return getFileName();
   }
 }
