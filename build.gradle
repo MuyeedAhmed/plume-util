@@ -66,7 +66,7 @@ dependencies {
   errorprone("com.google.errorprone:error_prone_core:2.16")
 }
 tasks.withType(JavaCompile).configureEach {
-  options.compilerArgs << "-Xlint:all,-processing" << "-Werror"
+//  options.compilerArgs << "-Xlint:all,-processing" << "-Werror"
   options.errorprone {
     enabled = JavaVersion.current() != JavaVersion.VERSION_1_8
     // Code copied from the JDK that we don't want to change gratuitously.
@@ -102,10 +102,14 @@ checkerFramework {
     // 'org.checkerframework.common.initializedfields.InitializedFieldsChecker',
   ]
   extraJavacArgs = [
-    '-Werror',
+//    '-Werror',
     '-AcheckPurityAnnotations',
     '-ArequirePrefixInWarningSuppressions',
     '-AwarnUnneededSuppressions',
+    '-Ainfer=ajava',
+    '-Awarns',
+    '-AinferOutputOriginal',
+    '-Aajava=$WPITEMPDIR',
   ]
 }
 // To use a locally-built Checker Framework, run gradle with "-PcfLocal".
@@ -123,7 +127,7 @@ if (project.hasProperty("cfLocal")) {
 
 // Turn Javadoc warnings into errors.
 javadoc {
-  options.addStringOption('Xwerror', '-Xdoclint:all')
+//  options.addStringOption('Xwerror', '-Xdoclint:all')
   options.addStringOption('private', '-quiet')
   // WeakIdentityHashMap leads to lots of Javadoc warnings due to missing Javadoc.
   // How can I generate Javadoc for it while still being strict for all other files?
