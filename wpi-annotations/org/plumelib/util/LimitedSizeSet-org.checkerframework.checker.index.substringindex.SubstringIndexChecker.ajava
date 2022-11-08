@@ -1,0 +1,235 @@
+package org.plumelib.util;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.index.qual.SameLen;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
+/**
+ * LimitedSizeSet stores up to some maximum number of unique values. If more than that many elements
+ * are added, then functionality is degraded: most operations return a conservative estimate
+ * (because the internal representation is nulled, in order to save space).
+ *
+ * <p>If you need {@code LimitedSizeSet<Integer>}, use {@link LimitedSizeIntSet} instead.
+ *
+ * <p>If you need {@code LimitedSizeSet<Long>}, use {@link LimitedSizeLongSet} instead.
+ *
+ * @param <T> the type of elements in the set
+ */
+@org.checkerframework.framework.qual.AnnotatedFor("org.checkerframework.checker.index.substringindex.SubstringIndexChecker")
+public class LimitedSizeSet<T extends Object> implements Serializable, Cloneable {
+
+    /**
+     * Unique identifier for serialization. If you add or remove fields, change this number.
+     */
+    static final   long serialVersionUID = 20031021L;
+
+    // The size is not separately stored, because that would take extra space.
+    /**
+     * If null, then at least {@link #numValues} distinct values have been seen (and {@link
+     * #numValues} equals the {@code maxValues} argument to the constructor).
+     */
+    protected T  [] values;
+
+    /**
+     * The number of active elements (equivalently, the first unused index).
+     */
+    // The Index Checker annotation is not @IndexOrHigh("values"), because the invariant is broken
+    // when the values field is set to null. Warnings are suppressed when breaking the invariant.
+    protected   int numValues;
+
+    /**
+     * Whether assertions are enabled.
+     */
+    private static   boolean assertsEnabled = false;
+
+    static {
+        // Intentional side-effect!!!
+        assert assertsEnabled = true;
+        // Now assertsEnabled is set to the correct value
+    }
+
+    /**
+     * Create a new LimitedSizeSet that can hold maxValues values.
+     *
+     * @param maxValues the maximum number of values this set will be able to hold; must be positive
+     */
+    public LimitedSizeSet(  int maxValues) {
+        if (assertsEnabled && !(maxValues > 0)) {
+            throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
+        }
+        // this.maxValues = maxValues;
+        T[] newValuesArray = (T[]) new Object[maxValues];
+        values = newValuesArray;
+        numValues = 0;
+    }
+
+    /**
+     * Add an element to this set.
+     *
+     * @param elt the element to add to this set
+     */
+    public void add( LimitedSizeSet<T> this, T elt) {
+        if (repNulled()) {
+            return;
+        }
+        if (contains(elt)) {
+            return;
+        }
+        if (numValues == values.length) {
+            nullRep();
+            return;
+        }
+        values[numValues] = elt;
+        numValues++;
+    }
+
+    /**
+     * Add all elements of {@code s} to this set.
+     *
+     * @param s the elements to add to this set
+     */
+    public void addAll( LimitedSizeSet<T> this,  LimitedSizeSet<? extends T> s) {
+        boolean sameObject = (this == s);
+        if (sameObject) {
+            return;
+        }
+        if (repNulled()) {
+            return;
+        }
+        if (s.repNulled()) {
+            // We don't know whether the elements of this and the argument were
+            // disjoint.  There might be anywhere from max(size(), s.size()) to
+            // (size() + s.size()) elements in the resulting set.
+            if (s.size() > values.length) {
+                nullRep();
+                return;
+            } else {
+                throw new Error("Arg is rep-nulled, so we don't know its values and can't add them to this.");
+            }
+        }
+        // TODO: s.values isn't modified by the call to add.  Use a local variable until
+        // https://tinyurl.com/cfissue/984 is fixed.
+        T[] svalues = s.values;
+        for (int i = 0; i < s.size(); i++) {
+            // This implies that the set cannot hold null.
+            assert svalues[i] != null : "@AssumeAssertion(nullness): used portion of array";
+            add(svalues[i]);
+            if (repNulled()) {
+                // optimization, not necessary for correctness
+                return;
+            }
+        }
+    }
+
+    /**
+     * Returns true if this set contains the given element.
+     *
+     * @param elt the element whose membership to test
+     * @return true if this set contains {@code elt}
+     */
+    public   boolean contains( LimitedSizeSet<T> this, T elt) {
+        if (repNulled()) {
+            throw new UnsupportedOperationException();
+        }
+        for (int i = 0; i < numValues; i++) {
+            if (Objects.equals(values[i], elt)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * A lower bound on the number of elements in the set. Returns either the number of elements that
+     * have been inserted in the set, or maxSize(), whichever is less.
+     *
+     * @return a number that is a lower bound on the number of elements added to the set
+     */
+    @org.checkerframework.dataflow.qual.Pure
+    public   int size( LimitedSizeSet<T> this) {
+        return numValues;
+    }
+
+    /**
+     * An upper bound on how many distinct elements can be individually represented in the set.
+     * Returns maxValues+1 (where maxValues is the argument to the constructor).
+     *
+     * @return maximum capacity of the set representation
+     */
+    public   int maxSize() {
+        if (repNulled()) {
+            return numValues;
+        } else {
+            return values.length + 1;
+        }
+    }
+
+    /**
+     * Returns true if more elements have been added than this set can contain (which is the integer
+     * that was passed to the constructor when creating this set).
+     *
+     * @return true if this set has been filled to capacity and its internal representation is nulled
+     */
+    @org.checkerframework.dataflow.qual.Pure
+    public   boolean repNulled( LimitedSizeSet<T> this) {
+        return values == null;
+    }
+
+    /**
+     * Null the representation, which happens when a client tries to add more elements to this set
+     * than it can contain (which is the integer that was passed to the constructor when creating this
+     * set).
+     */
+    private void nullRep( LimitedSizeSet<T> this) {
+        if (repNulled()) {
+            return;
+        }
+        numValues = values.length + 1;
+        values = null;
+    }
+
+    public  LimitedSizeSet<T> clone( LimitedSizeSet<T> this) {
+        LimitedSizeSet<T> result;
+        try {
+            LimitedSizeSet<T> resultAsLss = (LimitedSizeSet<T>) super.clone();
+            result = resultAsLss;
+        } catch (CloneNotSupportedException e) {
+            // can't happen
+            throw new Error();
+        }
+        if (values != null) {
+            result.values = values.clone();
+        }
+        return result;
+    }
+
+    /**
+     * Merges a list of {@code LimitedSizeSet<T>} objects into a single object that represents the
+     * values seen by the entire list. Returns the new object, whose maxValues is the given integer.
+     *
+     * @param <T> (super)type of elements of the sets
+     * @param maxValues the maximum size for the returned LimitedSizeSet
+     * @param slist a list of LimitedSizeSet, whose elements will be merged
+     * @return a LimitedSizeSet that merges the elements of slist
+     */
+    public static <T extends Object>  LimitedSizeSet<T> merge(int maxValues, List<LimitedSizeSet<? extends T>> slist) {
+        LimitedSizeSet<T> result = new LimitedSizeSet<>(maxValues);
+        for (LimitedSizeSet<? extends T> s : slist) {
+            result.addAll(s);
+        }
+        return result;
+    }
+
+    public  String toString( LimitedSizeSet<T> this) {
+        return ("[size=" + size() + "; " + (repNulled() ? "null" : ArraysPlume.toString(values)) + "]");
+    }
+}

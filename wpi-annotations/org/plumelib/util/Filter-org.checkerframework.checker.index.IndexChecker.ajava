@@ -1,0 +1,22 @@
+package org.plumelib.util;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+/**
+ * Interface for things that make boolean decisions. This is inspired by {@code
+ * java.io.FilenameFilter}.
+ *
+ * @param <T> the type of arguments to {@link #accept}
+ */
+@org.checkerframework.framework.qual.AnnotatedFor("org.checkerframework.checker.index.IndexChecker")
+public interface Filter<T extends Object> {
+
+    /**
+     * Tests whether a specified Object satisfies the filter.
+     *
+     * @param o the object to test
+     * @return whether the object satisfies the filter
+     */
+    @org.checkerframework.dataflow.qual.Pure
+    boolean accept( Filter<T> this, T o);
+}

@@ -1,0 +1,921 @@
+package org.plumelib.util;
+
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresKeyFor;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
+/**
+ * A map backed by a list. It permits null keys and values.
+ *
+ * <p>Compared to a HashMap or LinkedHashMap: For very small maps, this uses much less space, has
+ * comparable performance, and (like a LinkedHashMap) is deterministic. For large maps, this is
+ * significantly less performant than other map implementations.
+ *
+ * <p>Compared to a TreeMap: This uses somewhat less space, and it does not require defining a
+ * comparator. This isn't sorted. For large maps, this is significantly less performant than other
+ * map implementations.
+ *
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
+ */
+@org.checkerframework.framework.qual.AnnotatedFor("org.checkerframework.checker.resourceleak.ResourceLeakChecker")
+public class ArrayMap<K extends Object, V extends Object> extends AbstractMap<K, V> {
+
+    // An alternate internal representation would be a list of Map.Entry objects (e.g.,
+    // AbstractMap.SimpleEntry) instead of two arrays for lists and values.  It would make some
+    // operations more expensive.
+    // An alternate internal representation would be two arrays, similar to the internal
+    // representation of ArrayList.  That would be slightly more performant, at the cost of increased
+    // implementation complexity.
+    /**
+     * The keys.
+     */
+    private final @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayList<K> keys;
+
+    /**
+     * The values.
+     */
+    private final @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayList<V> values;
+
+    /**
+     * The number of times this HashMap has been modified (a change to the list lengths due to adding
+     * or removing an element; changing the value associated with a key does not count as a change).
+     * This field is used to make view iterators fail-fast.
+     */
+    transient  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int modificationCount = 0;
+
+    // Constructors
+    /**
+     * Constructs an empty {@code ArrayMap} with the specified initial capacity.
+     *
+     * @param initialCapacity the initial capacity
+     * @throws IllegalArgumentException if the initial capacity is negative
+     */
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.entrySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.keySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.valuesCollection" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    public ArrayMap(int initialCapacity) {
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
+        this.keys = new ArrayList<>(initialCapacity);
+        this.values = new ArrayList<>(initialCapacity);
+    }
+
+    /**
+     * Constructs an empty {@code ArrayMap} with the default initial capacity.
+     */
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.entrySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.keySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.valuesCollection" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    public ArrayMap() {
+        this.keys = new ArrayList<>();
+        this.values = new ArrayList<>();
+    }
+
+    /**
+     * Private constructor. Installs the given objects in this as its representation, without making
+     * defensive copies.
+     *
+     * @param keys the keys
+     * @param values the values
+     */
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.entrySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.keySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.EnsuresQualifier(expression = { "this.valuesCollection" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    private ArrayMap(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayList<K> keys, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayList<V> values) {
+        this.keys = keys;
+        this.values = values;
+    }
+
+    /**
+     * Constructs a new {@code ArrayMap} with the same mappings as the specified {@code Map}.
+     *
+     * @param m the map whose mappings are to be placed in this map
+     * @throws NullPointerException if the specified map is null
+     */
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "#1" }, methods = { "size" })
+    public ArrayMap(Map<? extends K, ? extends V> m) {
+        int size = m.size();
+        this.keys = new ArrayList<>(size);
+        this.values = new ArrayList<>(size);
+        putAll(m);
+    }
+
+    // Private helper functions
+    /**
+     * Adds the (key, value) mapping to this.
+     *
+     * @param index the index of {@code key} in {@code keys}; may be -1
+     * @param key the key
+     * @param value the value
+     */
+    private void put(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this,  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index, K key, V value) {
+        if (index == -1) {
+            keys.add(key);
+            values.add(value);
+            modificationCount++;
+        } else {
+            values.set(index, value);
+        }
+    }
+
+    /**
+     * Remove the mapping at the given index. Does nothing if index is -1.
+     *
+     * @param index the index of the mapping to remove
+     * @return true if this map was modified
+     */
+    private  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean removeIndex(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this,  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index) {
+        if (index != -1) {
+            keys.remove(index);
+            values.remove(index);
+            modificationCount++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Query Operations
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "size" })
+    @org.checkerframework.dataflow.qual.Pure
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int size(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        return keys.size();
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "isEmpty" })
+    @org.checkerframework.dataflow.qual.Pure
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean isEmpty(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        return keys.isEmpty();
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "contains" })
+    @org.checkerframework.dataflow.qual.Pure
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean containsKey(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key) {
+        return keys.contains(key);
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.values" }, methods = { "contains" })
+    @org.checkerframework.dataflow.qual.Pure
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean containsValue(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object value) {
+        return values.contains(value);
+    }
+
+    /**
+     * Returns true if this map contains the given mapping.
+     *
+     * @param key the key
+     * @param value the value
+     * @return true if this map contains the given mapping
+     */
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    @org.checkerframework.dataflow.qual.Pure
+    private  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean containsEntry(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object value) {
+        int index = keys.indexOf(key);
+        return index != -1 && Objects.equals(value, values.get(index));
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getOrNull" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V get(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key) {
+        int index = keys.indexOf(key);
+        return getOrNull(index);
+    }
+
+    /**
+     * Returns the value at the given index, or null if the index is -1.
+     *
+     * @param index the index
+     * @return the value at the given index, or null if the index is -1
+     */
+    @org.checkerframework.dataflow.qual.Pure
+    private V getOrNull(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this,  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index) {
+        return (index == -1) ? null : values.get(index);
+    }
+
+    // Modification Operations
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getOrNull", "put" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V put(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, V value) {
+        int index = keys.indexOf(key);
+        V currentValue = getOrNull(index);
+        put(index, key, value);
+        return currentValue;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "removeIndex" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V remove(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key) {
+        int index = keys.indexOf(key);
+        // cannot use removeIndex because it has the wrong return type
+        if (index == -1) {
+            return null;
+        }
+        V currentValue = values.get(index);
+        removeIndex(index);
+        return currentValue;
+    }
+
+    // Bulk Operations
+    @org.checkerframework.framework.qual.RequiresQualifier(expression = { "this.entrySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.RequiresQualifier(expression = { "this.keySet" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.framework.qual.RequiresQualifier(expression = { "this.valuesCollection" }, qualifier = org.checkerframework.checker.calledmethods.qual.CalledMethodsBottom.class)
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "#1" }, methods = { "isEmpty" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "put" })
+    public void putAll(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Map<? extends K, ? extends V> m) {
+        if (m.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<? extends K, ? extends V> entry : m.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "clear" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.values" }, methods = { "clear" })
+    public void clear(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        if (size() != 0) {
+            modificationCount++;
+        }
+        keys.clear();
+        values.clear();
+    }
+
+    // Views
+    /**
+     * A view of the keys.
+     */
+    @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Set<K> keySet = null;
+
+    // Behavior is undefined if the map is changed while the sets are being iterated through, so these
+    // implementations can assume there are no concurrent side effects.
+    public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Set<K> keySet(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        if (keySet == null) {
+            keySet = new KeySet();
+        }
+        return keySet;
+    }
+
+    /**
+     * Represents a view of the keys.
+     */
+    final class KeySet extends AbstractSet<K> {
+
+        /**
+         * Creates a new KeySet.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        public KeySet() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int size(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this) {
+            return ArrayMap.this.size();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "clear" })
+        public final void clear(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this) {
+            ArrayMap.this.clear();
+        }
+
+        public final @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Iterator<K> iterator(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this) {
+            return new KeyIterator();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "containsKey" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean contains(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            return containsKey(o);
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "removeIndex" })
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean remove(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            int index = keys.indexOf(o);
+            return removeIndex(index);
+        }
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] toArray(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this) {
+            return keys.toArray(new Object[keys.size()]);
+        }
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        public <T> T @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] toArray(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this, T @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] a) {
+            return keys.toArray(a);
+        }
+
+        public final void forEach(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Consumer<? super K> action) {
+            int oldModificationCount = modificationCount;
+            keys.forEach(action);
+            if (oldModificationCount != modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    /**
+     * The view of the values.
+     */
+    @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Collection<V> valuesCollection = null;
+
+    public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Collection<V> values(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        if (valuesCollection == null) {
+            valuesCollection = new Values();
+        }
+        return valuesCollection;
+    }
+
+    /**
+     * Represents a view of the values.
+     */
+    final class Values extends AbstractCollection<V> {
+
+        /**
+         * Creates a new Values.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        public Values() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int size(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this) {
+            return ArrayMap.this.size();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "clear" })
+        public final void clear(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this) {
+            ArrayMap.this.clear();
+        }
+
+        public final @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Iterator<V> iterator(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this) {
+            return new ValueIterator();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "containsValue" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean contains(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            return containsValue(o);
+        }
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] toArray(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this) {
+            return values.toArray(new Object[values.size()]);
+        }
+
+        @org.checkerframework.dataflow.qual.SideEffectFree
+        public <T> T @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] toArray(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this, T @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) [] a) {
+            return values.toArray(a);
+        }
+
+        public final void forEach(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Values this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Consumer<? super V> action) {
+            int oldModificationCount = modificationCount;
+            values.forEach(action);
+            if (oldModificationCount != modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    /**
+     * The view of the entries.
+     */
+    @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Set<Map.Entry<K, V>> entrySet = null;
+
+    public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Set<Map.Entry<K, V>> entrySet(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        if (entrySet == null) {
+            entrySet = new EntrySet();
+        }
+        return entrySet;
+    }
+
+    /**
+     * Represents a view of the entries.
+     */
+    final class EntrySet extends AbstractSet<Map.Entry<K, V>> {
+
+        /**
+         * Creates a new EntrySet.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        public EntrySet() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int size(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this) {
+            return ArrayMap.this.size();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "clear" })
+        public final void clear(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this) {
+            ArrayMap.this.clear();
+        }
+
+        public final @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Iterator<Map.Entry<K, V>> iterator(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this) {
+            return new EntryIterator();
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "containsEntry" })
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean contains(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            Object key = e.getKey();
+            Object value = e.getValue();
+            return containsEntry(key, value);
+        }
+
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean remove(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            if (o instanceof Map.Entry) {
+                Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+                Object key = e.getKey();
+                Object value = e.getValue();
+                return ArrayMap.this.remove(key, value);
+            }
+            return false;
+        }
+
+        // toArray() and toArray(T[] a) are inherited.
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+        public final void forEach(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntrySet this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Consumer<? super Map.Entry<K, V>> action) {
+            int oldModificationCount = modificationCount;
+            for (int index = 0; index < size(); index++) {
+                action.accept(new Entry(index));
+            }
+            if (oldModificationCount != modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // iterators
+    /**
+     * An iterator over the ArrayMap.
+     */
+    abstract class ArrayMapIterator {
+
+        /**
+         * The first unread index; the index of the next value to return.
+         */
+         @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index;
+
+        /**
+         * True if remove() has been called since the last call to next().
+         */
+         @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean removed;
+
+        /**
+         * The modification count when the iterator is created, for fail-fast.
+         */
+         @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int initialModificationCount;
+
+        /**
+         * Creates a new ArrayMapIterator.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        ArrayMapIterator() {
+            index = 0;
+            // can't remove until next() has been called
+            removed = true;
+            initialModificationCount = modificationCount;
+        }
+
+        /**
+         * Returns true if this has another element.
+         *
+         * @return true if this has another element
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+        @org.checkerframework.dataflow.qual.Pure
+        public final  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean hasNext(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMapIterator this) {
+            return index < size();
+        }
+
+        // TODO: This should only return a single element.  Calling it twice in a row should throw
+        // IllegalStateException.
+        /**
+         * Removes the previously-returned element.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "removeIndex" })
+        public final void remove() {
+            if (removed) {
+                throw new IllegalStateException();
+            }
+            if (initialModificationCount != modificationCount) {
+                throw new ConcurrentModificationException();
+            }
+            int newIndex = index - 1;
+            index = newIndex;
+            ArrayMap.this.removeIndex(index);
+            initialModificationCount = modificationCount;
+            removed = true;
+        }
+    }
+
+    /**
+     * An iterator over the keys.
+     */
+    final class KeyIterator extends ArrayMapIterator implements Iterator<K> {
+
+        /**
+         * Creates a new KeyIterator.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        KeyIterator() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "hasNext" })
+        public final K next(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) KeyIterator this) {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            removed = false;
+            return keys.get(index++);
+        }
+    }
+
+    /**
+     * An iterator over the values.
+     */
+    final class ValueIterator extends ArrayMapIterator implements Iterator<V> {
+
+        /**
+         * Creates a new ValueIterator.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        ValueIterator() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "hasNext" })
+        public final V next(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ValueIterator this) {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            removed = false;
+            return values.get(index++);
+        }
+    }
+
+    /**
+     * An iterator over the entries.
+     */
+    final class EntryIterator extends ArrayMapIterator implements Iterator<Map.Entry<K, V>> {
+
+        /**
+         * Creates a new EntryIterator.
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        EntryIterator() {
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "hasNext" })
+        public final Map.@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry<K, V> next(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) EntryIterator this) {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            removed = false;
+            return new Entry(index++);
+        }
+    }
+
+    // An alternate representation would be a triple of index, key, and value.
+    // * That would make Entry objects a bit larger (more allocation would be necessary, though the
+    // same *number* of objects), and would take a tiny bit more computation to create.
+    // * That would make calling getKey and getValue slightly cheaper if they are called multiple
+    // times (a local lookup instead of calling an ArrayList method).
+    // * That would provide less surprising results for some illegal client code.  Removing from the
+    // entrySet iterator and then calling any entry method (getKey, getValue, setValue) has
+    // undefined behavior, but clients might try to do it.  This could issue
+    // ConcurrentModificationException in that case, by checking that the values in the array still
+    // match those stored in the entry.
+    // Per the specification of Map.Entry, a map entry is  meaningful only during the execution of the
+    // iteration over the entry set, and only if the backing map has not been modified except through
+    // calling {@code setValue} on the map entry.
+    /**
+     * An entrySet() entry. Tracks the containing list and the index.
+     */
+    final class Entry implements Map.Entry<K, V> {
+
+        /**
+         * The index.
+         */
+         @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index;
+
+        /**
+         * Creates a new map entry.
+         *
+         * @param index the index
+         */
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "<init>" })
+        public Entry( @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int index) {
+            this.index = index;
+        }
+
+        @org.checkerframework.dataflow.qual.Pure
+        public K getKey(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this) {
+            return keys.get(index);
+        }
+
+        @org.checkerframework.dataflow.qual.Pure
+        public V getValue(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this) {
+            return values.get(index);
+        }
+
+        public V setValue(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this, V value) {
+            // Do not increment modificationCount.
+            return values.set(index, value);
+        }
+
+        /**
+         * Returns the ArrayMap associated with this entry.
+         *
+         * @return the ArrayMap associated with this entry
+         */
+        @org.checkerframework.dataflow.qual.Pure
+        private @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> theArrayMap(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this) {
+            return ArrayMap.this;
+        }
+
+        // Per the specification of Map.Entry, this does not compare the underlying list and index.
+        public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean equals(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o instanceof ArrayMap.Entry) {
+                Entry otherEntry = (Entry) o;
+                boolean result = this.index == otherEntry.index && this.theArrayMap() == otherEntry.theArrayMap();
+                if (result) {
+                    return true;
+                }
+                // else fall through
+            }
+            if (o instanceof Map.Entry) {
+                Map.Entry<K, V> otherEntry = (Map.Entry<K, V>) o;
+                return Objects.equals(this.getKey(), otherEntry.getKey()) && Objects.equals(this.getValue(), otherEntry.getValue());
+            }
+            return false;
+        }
+
+        @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getKey", "getValue" })
+        @org.checkerframework.dataflow.qual.Pure
+        public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int hashCode(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Entry this) {
+            return Objects.hash(getKey(), getValue());
+        }
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Comparison and hashing
+    // public boolean equals(Object other) equals() is inherited
+    @org.checkerframework.dataflow.qual.Pure
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) int hashCode(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        return Objects.hash(keys, values);
+    }
+
+    // Defaultable methods
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    @org.checkerframework.dataflow.qual.Pure
+    public V getOrDefault(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key, V defaultValue) {
+        int index = keys.indexOf(key);
+        if (index != -1) {
+            return values.get(index);
+        } else {
+            return defaultValue;
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+    public void forEach(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) BiConsumer<? super K, ? super V> action) {
+        Objects.requireNonNull(action);
+        int oldModificationCount = modificationCount;
+        int size = size();
+        for (int index = 0; index < size; index++) {
+            K k;
+            V v;
+            try {
+                k = keys.get(index);
+                v = values.get(index);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException(e);
+            }
+            action.accept(k, v);
+        }
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "size" })
+    public void replaceAll(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) BiFunction<? super K, ? super V, ? extends V> function) {
+        Objects.requireNonNull(function);
+        int oldModificationCount = modificationCount;
+        int size = size();
+        for (int index = 0; index < size; index++) {
+            K k;
+            V v;
+            try {
+                k = keys.get(index);
+                v = values.get(index);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException(e);
+            }
+            v = function.apply(k, v);
+            try {
+                values.set(index, v);
+                // Do not increment modificationCount.
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException(e);
+            }
+        }
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getOrNull", "put" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V putIfAbsent(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, V value) {
+        int index = keys.indexOf(key);
+        V currentValue = getOrNull(index);
+        put(index, key, value);
+        return currentValue;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "removeIndex" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean remove(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object key, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Object value) {
+        int index = keys.indexOf(key);
+        if (index == -1) {
+            return false;
+        }
+        Object curValue = values.get(index);
+        if (!Objects.equals(curValue, value)) {
+            return false;
+        }
+        removeIndex(index);
+        return true;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public  @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) boolean replace(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, V oldValue, V newValue) {
+        int index = keys.indexOf(key);
+        if (index == -1) {
+            return false;
+        }
+        Object curValue = values.get(index);
+        if (!Objects.equals(curValue, oldValue)) {
+            return false;
+        }
+        values.set(index, newValue);
+        // Do not increment modificationCount.
+        return true;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V replace(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, V value) {
+        int index = keys.indexOf(key);
+        if (index == -1) {
+            return null;
+        }
+        V currentValue = values.get(index);
+        values.set(index, value);
+        // Do not increment modificationCount.
+        return currentValue;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "put" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V computeIfAbsent(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) Function<? super K, ? extends V> mappingFunction) {
+        Objects.requireNonNull(mappingFunction);
+        int index = keys.indexOf(key);
+        V currentValue;
+        if (index != -1) {
+            currentValue = values.get(index);
+            if (currentValue != null) {
+                return currentValue;
+            }
+        }
+        int oldModificationCount = modificationCount;
+        V newValue = mappingFunction.apply(key);
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+        if (newValue != null) {
+            put(index, key, newValue);
+        }
+        return newValue;
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "removeIndex" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V computeIfPresent(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        Objects.requireNonNull(remappingFunction);
+        int index = keys.indexOf(key);
+        if (index == -1) {
+            V result = null;
+            return result;
+        }
+        V oldValue = values.get(index);
+        if (oldValue == null) {
+            V result = null;
+            return result;
+        }
+        int oldModificationCount = modificationCount;
+        V newValue = remappingFunction.apply(key, oldValue);
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+        if (newValue != null) {
+            values.set(index, newValue);
+            // Do not increment modificationCount.
+            return newValue;
+        } else {
+            removeIndex(index);
+            return null;
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "#2" }, methods = { "apply" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getOrNull" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V compute(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        Objects.requireNonNull(remappingFunction);
+        int index = keys.indexOf(key);
+        V oldValue = getOrNull(index);
+        int oldModificationCount = modificationCount;
+        V newValue = remappingFunction.apply(key, oldValue);
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+        if (newValue == null) {
+            removeIndex(index);
+            return null;
+        } else {
+            put(index, key, newValue);
+            return newValue;
+        }
+    }
+
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this" }, methods = { "getOrNull" })
+    @org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods(value = { "this.keys" }, methods = { "indexOf" })
+    public V merge(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this, K key, V value, @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        Objects.requireNonNull(remappingFunction);
+        Objects.requireNonNull(value);
+        int index = keys.indexOf(key);
+        V oldValue = getOrNull(index);
+        int oldModificationCount = modificationCount;
+        V newValue;
+        if (oldValue == null) {
+            newValue = value;
+        } else {
+            newValue = remappingFunction.apply(oldValue, value);
+        }
+        if (oldModificationCount != modificationCount) {
+            throw new ConcurrentModificationException();
+        }
+        if (newValue == null) {
+            removeIndex(index);
+        } else {
+            put(index, key, newValue);
+        }
+        return newValue;
+    }
+
+    /**
+     * Returns a copy of this.
+     *
+     * @return a copy of this
+     */
+    public @org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> clone(@org.checkerframework.checker.calledmethods.qual.CalledMethods({}) ArrayMap<K, V> this) {
+        return new ArrayMap<>(new ArrayList<>(keys), new ArrayList<>(values));
+    }
+}
